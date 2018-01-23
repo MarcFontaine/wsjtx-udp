@@ -11,7 +11,8 @@
 -- The package types of the WSJT-X UDP protocol.
 -- See NetworkMessage.hpp in WSJT-X sources.
 
-{-# LANGUAGE DeriveGeneric, TemplateHaskell #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE TemplateHaskell #-}
 module WSJTX.UDP.NetworkMessage
 where
 
@@ -186,8 +187,6 @@ instance Read DiffTime where
       f :: Pico
       r :: String
       (f,r) = Prelude.head $ readsPrec p input
-
---  toEncoding = genericToEncoding defaultOptions
 
 aesonOptionsDropPrefix :: Options
 aesonOptionsDropPrefix
