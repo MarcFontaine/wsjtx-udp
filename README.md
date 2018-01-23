@@ -2,8 +2,8 @@
 
 This library provides:
 
-* The types for WSJT-X UDP network messages
-* Functions for encoding and decoding of packages
+* The types for WSJT-X UDP network messages.
+* Functions for encoding and decoding of packages.
 * UDP Server for receiving messages from WSJT-X and sending to WSJT-X.
 * JSON instances for network messages.
 
