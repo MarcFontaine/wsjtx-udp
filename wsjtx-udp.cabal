@@ -28,8 +28,8 @@ library
     , time
     , binary
     , binary-parsers
-    , microlens
-    , microlens-th
+--    , microlens
+--    , microlens-th
     , aeson
     , network                 
   hs-source-dirs: src

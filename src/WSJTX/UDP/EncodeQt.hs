@@ -14,7 +14,9 @@
 --  Also see NetworkMessage.hpp in WSJTX sources.
 --  This module only supports the schema 2 protocol.
 
-{-# LANGUAGE DefaultSignatures, TypeOperators, FlexibleContexts #-}
+{-# LANGUAGE DefaultSignatures #-}
+{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE LambdaCase #-}
 
 module WSJTX.UDP.EncodeQt
@@ -70,8 +72,8 @@ class FromQt' f where
   fromQt' :: Get (f p)
 
 instance FromQt' U1 where fromQt' = return U1
-instance (FromQt' f) => FromQt' (M1 i t f) where fromQt' = fmap M1 $ fromQt'
-instance (FromQt c) => FromQt' (K1 i c) where fromQt' = fmap K1 $ fromQt
+instance (FromQt' f) => FromQt' (M1 i t f) where fromQt' = M1 <$> fromQt'
+instance (FromQt c) => FromQt' (K1 i c) where fromQt' = K1 <$> fromQt
 instance (FromQt' f, FromQt' g) => FromQt' (f :*: g)
   where
     fromQt' = do
@@ -104,7 +106,7 @@ instance FromQt Bool where
 instance FromQt DiffTime where
   fromQt = do
     t <- getWord32be
-    return $ picosecondsToDiffTime $ ((fromIntegral t) * 1000000000)
+    return $ picosecondsToDiffTime (fromIntegral t * 1000000000)
 
 parseUDPPackage :: BS.ByteString -> Package
 parseUDPPackage bs
@@ -116,7 +118,7 @@ parseUDPPackage bs
     package = do
       qtMagicWord
       schema <- getWord32be
-      when (schema /= 2) $ mzero
+      when (schema /= 2) mzero
       getWord32be >>= \case
           0 -> pc PHeartbeat          
           1 -> pc PStatus

@@ -34,11 +34,11 @@ defaultPort = 2237
 testDump :: IO ()
 testDump = withWsjtxSocket defaultPort $ \sock -> do
   _threadId <- forkWsjtxServer sock print
-  void $ getLine
+  void getLine
   
 withWsjtxSocket :: PortNumber -> (Socket -> IO a) -> IO a
-withWsjtxSocket port cont
-  = bracket (openSocket port) close cont
+withWsjtxSocket port
+  = bracket (openSocket port) close
          
 forkWsjtxServer :: Socket -> (Package -> IO ()) -> IO ThreadId
 forkWsjtxServer conn callback = forkIO $ forever $ do

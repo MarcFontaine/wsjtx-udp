@@ -31,9 +31,9 @@ data Heartbeat = Heartbeat {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Heartbeat where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Heartbeat where 
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
 
 data Status = Status {
     status_client_id :: Text
@@ -56,9 +56,9 @@ data Status = Status {
 } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Status where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Status where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
    
 data Decode = Decode {
     decode_client_id :: Text
@@ -72,18 +72,18 @@ data Decode = Decode {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Decode where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Decode where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
 
 data Clear = Clear {
    clear_client_id :: Text
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Clear where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Clear where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
 
 data Reply = Reply {
    reply_client_id :: Text
@@ -95,9 +95,9 @@ data Reply = Reply {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Reply where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Reply where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
   
 data Logged = Logged {
     logged_client_id :: Text
@@ -115,18 +115,18 @@ data Logged = Logged {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Logged where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Logged where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
   
 data Close = Close {
   close_client_id :: Text
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Close where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Close where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
   
 data Replay = Replay {
     replay_client_id :: Text
@@ -134,9 +134,9 @@ data Replay = Replay {
   deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Replay where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Replay where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
   
 data HaltTx = HaltTx {
     haltTx_client_id :: Text
@@ -144,9 +144,9 @@ data HaltTx = HaltTx {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON HaltTx where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON HaltTx where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
   
 data FreeText = FreeText {
     freeText_client_id :: Text
@@ -155,9 +155,9 @@ data FreeText = FreeText {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON FreeText where
-  toEncoding = genericToEncoding $ aesonOptionsDropPrefix
+  toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON FreeText where
-  parseJSON = genericParseJSON $ aesonOptionsDropPrefix
+  parseJSON = genericParseJSON aesonOptionsDropPrefix
 
 data Package
   = PHeartbeat Heartbeat
@@ -180,7 +180,7 @@ instance FromJSON Package where
   
 instance Read DiffTime where
   readsPrec p input
-     = [(picosecondsToDiffTime $ floor  (f*1000000000000)
+     = [(picosecondsToDiffTime $ floor (f*1000000000000)
         ,Prelude.tail r)]
     where
       f :: Pico
@@ -192,7 +192,7 @@ instance Read DiffTime where
 aesonOptionsDropPrefix :: Options
 aesonOptionsDropPrefix
   = defaultOptions {
-      fieldLabelModifier = tail . snd . break ((==) '_')
+      fieldLabelModifier = tail . dropWhile (not . (==) '_')
     }
 
 {-
