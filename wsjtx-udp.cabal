@@ -1,14 +1,15 @@
 name:                wsjtx-udp
-synopsis:            WSJT-X UDP packages and UDP server
+synopsis:            WSJT-X UDP protocol
 description:
-   WSJT-X UDP packages and UDP server
+  Utilities for the WSJT-X UDP protocol.
+  Encoding and decoding USP packages to binary and JSON and a UDP server.
 version:             0.1.0
 license:             BSD3
 license-file:        LICENSE
 author:              Marc Fontaine
 maintainer:          Marc.Fontaine@gmx.de
 category:            HAM, Network, IoT
-homepage:            https://github.com/MarcFontaine/wsjtx-to-mqtt
+homepage:            https://github.com/MarcFontaine/wsjtx-udp
 extra-source-files:  README.md
 build-type:          Simple
 cabal-version:       >=1.10
