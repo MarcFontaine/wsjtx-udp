@@ -104,7 +104,7 @@ matrix:
 #  Settings beyond this point are advanced and normally not tweaked
 # ------------------------------------------------------------------------
 
-language: generic
+language: bash
 sudo: false
 cache:
   directories:
