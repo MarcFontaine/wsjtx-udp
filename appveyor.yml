@@ -47,5 +47,5 @@ test_script:
 - chcp 65001 && stack exec bash -- -c "chmod +x %PACKCHECK%; %PACKCHECK% stack"
 
 artifacts:
-  - path: c:\pkg\.stack-work\install\*
+  - path: '.stack-work\install\*'
     name: wsjtx-dump-udp
