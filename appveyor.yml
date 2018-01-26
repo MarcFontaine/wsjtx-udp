@@ -18,7 +18,7 @@ environment:
     CABAL_CHECK_RELAX: "y"
     CABAL_NO_SANDBOX: "y"
     CABAL_HACKAGE_MIRROR: "hackage.haskell.org:http://hackage.fpcomplete.com"
-    TEST_INSTALL: "y"
+    TEST_INSTALL: "n"
     LC_ALL: "C.UTF-8"
     PATH: "%PATH%;%APPDATA%\\local\\bin"
 
@@ -45,3 +45,7 @@ before_test:
 test_script:
 - stack setup > nul
 - chcp 65001 && stack exec bash -- -c "chmod +x %PACKCHECK%; %PACKCHECK% stack"
+
+artifacts:
+  - path: pkg\.stack-work\install\*\bin\wsjtx-dump-udp.exe
+    name: wsjtx-dump-udp

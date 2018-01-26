@@ -25,7 +25,12 @@ env:
   - LC_ALL=C.UTF-8
 
 notifications:
-  email: false
+  email:
+    recipients:
+      secure: "DZKp2uKxT2/807752ZknAlaHFUwb5QzthDjhCd9WTKptujZGTn2kBNr48dgKvTXD4IU4Agyd9yF1acxe2/w/0yrBeLXWZTFP2al0wr17o0zCQRVbRvT/EpROjmxX/BSWnAI3FNgOnczVSotbcMsAUjBRjteu68WDfDuxGVnR06OgSS14UKMwQLnyFYlic5EiMVXcani28RPp1+oDapI8pmoDHYzITH5plGYxa/SNMll3xDLjFRKoZAKTxkoDZiArPElk7LaRFTe0lGN16tQlg7hHCI976osKBjSzRI1xvAz/gYWnHOFRicons/a1F/UDHJYHLZHn992j7OMs9eb5NvxEPfddT7TR49HzuGU2i4Ls2ePUI5p93CfFzsW8Qn4PcPUM/pxdHZzqZsQBjKqdjM8cjsLVPe9umPcJD4lcgY6sTwoz9+2IDiXvHBRthDu5rkBY1brU65t40Z41YUTIJ0ihO0AQ7GrUEjhc5A0iWgoH++v1ch6GBgM8OuNx6nEZ6U3j8QM3blE2HFK24H6OuoldD1ACL40bch03icJyWCnbQ2uhG14BAI4cQ/61J/QbxxZkZhPdvyjylKmjMDEuyl3F2pkZAq0GVk2/TpNxWG8KGic2jASHp8tsphzJtFDIwMWU4pZ+0h/+Ssuglid7s03tJ7xWGE1D1BB8pEGkh3A="
+    on_success: change
+    on_failure: always
+
 
 # This matrix has total 11 builds enabled, 4 builds each (3 last major compiler
 # versions and head) for stack and cabal, 2 OSX builds (stack and cabal for
