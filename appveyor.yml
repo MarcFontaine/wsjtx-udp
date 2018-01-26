@@ -49,7 +49,7 @@ test_script:
 
 artifacts:
   - path: wsjtx-dump-udp.exe
-    
+
 deploy:
   provider: GitHub
   auth_token:
