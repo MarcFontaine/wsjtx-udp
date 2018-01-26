@@ -45,6 +45,7 @@ before_test:
 test_script:
 - stack setup > nul
 - chcp 65001 && stack exec bash -- -c "chmod +x %PACKCHECK%; %PACKCHECK% stack"
+- stack --local-bin-path . install
 
 artifacts:
 - path: .stack-work\dist\5c8418a7\wsjtx-udp-0.1.0.6.tar.gz
