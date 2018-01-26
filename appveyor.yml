@@ -49,12 +49,12 @@ test_script:
 
 artifacts:
   - path: wsjtx-dump-udp.exe
-
+    
 deploy:
   provider: GitHub
   auth_token:
     secure: AWoTiXZzN2N3h+bN41iEYGW8UHYKvTVnrtWRGiaZIzhuQlyBOq+QlxuxDHDDAn1J
-  artifact: wsjtx-dump.udp.exe
+  artifact: wsjtx-dump-udp.exe
   on:
     appveyor_repo_tag: true
     
