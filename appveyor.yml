@@ -15,7 +15,7 @@ environment:
     STACK_ROOT: "c:\\sr"
 
 test_script:
-- stack --local-bin-path . --install-ghc build --test --copy-bins wsjtx-udp
+- stack --local-bin-path . --install-ghc build --test --copy-bins
 
 artifacts:
 - path: wsjtx-dump-udp.exe
