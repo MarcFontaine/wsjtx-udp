@@ -47,5 +47,5 @@ test_script:
 - chcp 65001 && stack exec bash -- -c "chmod +x %PACKCHECK%; %PACKCHECK% stack"
 
 artifacts:
-- path: wsjtx-dump-udp.exe
-  name: wsjtx-win 
+- path: .stack-work\dist\5c8418a7\wsjtx-udp-0.1.0.6.tar.gz
+  name: package.tgz
