@@ -147,22 +147,22 @@ script:
 
 
 deploy:
-  provider: releases
-  api_key:
-    secure: Afa47+xKCVR5wdcNSTT3Z3f2vTkuhL/FBVu6rAdj+0Os1r8f9WXY/V2bxMXOf7QfBOOKZZV0VaXo9Zzjtbd4LkxFPSqtZcAxamRj2zlBr7Drb55s0irDwtC7WtafrJSLv8E3+aXjCCBJylF5IqpJAkqnYteHCaONGzKXYacxHDT9nQxF0xHFHLrxT+V6dke1Bq8Q+LxtZmvAMdr68lUxxwMcqxAQKZEnqPfDEswrtPcmsm5/0WqnC954bXaP29I3OW8QmOCgTDqdhuPIPL5sioSNaR2uRtcO+kxeeOgjc30wcb56tcF/iHpuzeOGMY/PQCkSoGHlMAfBswoMsgdjmBARVO1e83oU8aAQ7h8cGoBzywlF4uFBoEZ4LqD3CDvjQYtvzM78/wYjv6MUxSrUHO215xjOl+kizH892KieD1eDu7cGuL/gbVsfz02e/Iw52ncnYMLRn0K0TUvFBqKRfESxB+9+6NGJHwPAMV5ibk3O9CCYg1To/DBuuOaV91YFXfgxgfm3mluqMvGYZeTMAIwxenXNwaITswDXdxXZxn3QZJejJdgvbyTmriypMb+krVQrJrRnyN13OPD5wJyjKRn4tPhxH00BfS+e8vyUU2bu+KqNtCtGKJTBohm/GSeAHgx8rMAkEe+Tr8CXHK8gDzAosPWKMTtswCkEQxphe8o=
-  file_glob: true
-  file: /home/travis/build/MarcFontaine/wsjtx-udp/.stack-work/dist/x86_64-linux/*/wsjtx-udp-*.tar.gz
-  skip_cleanup: true
-  on:
-    tags: true
-
-deploy:
-  provider: hackage
-  api_key:
+  - provider: releases
+    api_key:
+      secure: Afa47+xKCVR5wdcNSTT3Z3f2vTkuhL/FBVu6rAdj+0Os1r8f9WXY/V2bxMXOf7QfBOOKZZV0VaXo9Zzjtbd4LkxFPSqtZcAxamRj2zlBr7Drb55s0irDwtC7WtafrJSLv8E3+aXjCCBJylF5IqpJAkqnYteHCaONGzKXYacxHDT9nQxF0xHFHLrxT+V6dke1Bq8Q+LxtZmvAMdr68lUxxwMcqxAQKZEnqPfDEswrtPcmsm5/0WqnC954bXaP29I3OW8QmOCgTDqdhuPIPL5sioSNaR2uRtcO+kxeeOgjc30wcb56tcF/iHpuzeOGMY/PQCkSoGHlMAfBswoMsgdjmBARVO1e83oU8aAQ7h8cGoBzywlF4uFBoEZ4LqD3CDvjQYtvzM78/wYjv6MUxSrUHO215xjOl+kizH892KieD1eDu7cGuL/gbVsfz02e/Iw52ncnYMLRn0K0TUvFBqKRfESxB+9+6NGJHwPAMV5ibk3O9CCYg1To/DBuuOaV91YFXfgxgfm3mluqMvGYZeTMAIwxenXNwaITswDXdxXZxn3QZJejJdgvbyTmriypMb+krVQrJrRnyN13OPD5wJyjKRn4tPhxH00BfS+e8vyUU2bu+KqNtCtGKJTBohm/GSeAHgx8rMAkEe+Tr8CXHK8gDzAosPWKMTtswCkEQxphe8o=
+    file_glob: true
+    file: /home/travis/build/MarcFontaine/wsjtx-udp/.stack-work/dist/x86_64-linux/*/wsjtx-udp-*.tar.gz
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: hackage
+    user_name: dummyuser
+    password: dummypwd
+    api_key:
     # hackage token name : travis-wsjtx-udp-release 
-    secure: "HzjhbcLVubj0Z3Un8RQ42dyISdUKcREw9xoiK232juEw9DRvQLt+IG0jQLmblS8G6iSDM1AZG9j3d8+UV8TW/RB9wX3iD0zg3GI76oEx9eXU4ru6lKV0Epijmy/St6oowsi8v2i7mu06aXKdO5+hIsCAcG0RaDtDp4Z4zmM1FRI9ZJJV+KxykS71MTUn+D9BgQhDkTvZth4Ut4liHE6rg+noz68rc7hz6w8YX73aDryWJV8fcXZXl9DdHXabLUslkdzAiSbeLoXitDAn7jmdcoMw6NNELTJJ0HdPV2m+R3up3g9m0cg/CYdZu21ngldLCF/vtjuqYq66chp8wcqGCe4WTBWXgNJVkikrJOw71M67CwrCJnZoH61D4G6LPcg0w42+/zqTyyVMVWffDsALkyg0PZXnE7D+CoOFgYRA0Ti7ae8QzNw3JfjSBXdCJNw5kVrK3vTlvg4D7NA83nCms9JzPvovMMvwUJqMZZ7BzbhL+1QRquqUb6C4EG5vAa7TXUNEQ7i6RmTX6Vl82MvQPPntMvYmkIOc8t/3lagDDBFrI3BLaJTaqsqKhwRXOlGbXypw/58ISCIrGIdGYBiz+Nai9JV+R3eGO+Cr6H/pb8kUC5viBQqbS/ooRZDWqk4Cz7IBRKoE+OeWrDqfOktCH4PRw1lheeCdPuY0lzr19DU="      
-  file_glob: true
-  file: /home/travis/build/MarcFontaine/wsjtx-udp/.stack-work/dist/x86_64-linux/*/wsjtx-udp-*.tar.gz
-  skip_cleanup: true
-  on:
-    tags: true
+      secure: "HzjhbcLVubj0Z3Un8RQ42dyISdUKcREw9xoiK232juEw9DRvQLt+IG0jQLmblS8G6iSDM1AZG9j3d8+UV8TW/RB9wX3iD0zg3GI76oEx9eXU4ru6lKV0Epijmy/St6oowsi8v2i7mu06aXKdO5+hIsCAcG0RaDtDp4Z4zmM1FRI9ZJJV+KxykS71MTUn+D9BgQhDkTvZth4Ut4liHE6rg+noz68rc7hz6w8YX73aDryWJV8fcXZXl9DdHXabLUslkdzAiSbeLoXitDAn7jmdcoMw6NNELTJJ0HdPV2m+R3up3g9m0cg/CYdZu21ngldLCF/vtjuqYq66chp8wcqGCe4WTBWXgNJVkikrJOw71M67CwrCJnZoH61D4G6LPcg0w42+/zqTyyVMVWffDsALkyg0PZXnE7D+CoOFgYRA0Ti7ae8QzNw3JfjSBXdCJNw5kVrK3vTlvg4D7NA83nCms9JzPvovMMvwUJqMZZ7BzbhL+1QRquqUb6C4EG5vAa7TXUNEQ7i6RmTX6Vl82MvQPPntMvYmkIOc8t/3lagDDBFrI3BLaJTaqsqKhwRXOlGbXypw/58ISCIrGIdGYBiz+Nai9JV+R3eGO+Cr6H/pb8kUC5viBQqbS/ooRZDWqk4Cz7IBRKoE+OeWrDqfOktCH4PRw1lheeCdPuY0lzr19DU="      
+    file_glob: true
+    file: /home/travis/build/MarcFontaine/wsjtx-udp/.stack-work/dist/x86_64-linux/*/wsjtx-udp-*.tar.gz
+    skip_cleanup: true
+    on:
+      tags: true
