@@ -158,8 +158,7 @@ deploy:
 
 deploy:
   provider: hackage
-  username: MarcFontaine
-  password:
+  api_key:
     # hackage token name : travis-wsjtx-udp-release 
     secure: "HzjhbcLVubj0Z3Un8RQ42dyISdUKcREw9xoiK232juEw9DRvQLt+IG0jQLmblS8G6iSDM1AZG9j3d8+UV8TW/RB9wX3iD0zg3GI76oEx9eXU4ru6lKV0Epijmy/St6oowsi8v2i7mu06aXKdO5+hIsCAcG0RaDtDp4Z4zmM1FRI9ZJJV+KxykS71MTUn+D9BgQhDkTvZth4Ut4liHE6rg+noz68rc7hz6w8YX73aDryWJV8fcXZXl9DdHXabLUslkdzAiSbeLoXitDAn7jmdcoMw6NNELTJJ0HdPV2m+R3up3g9m0cg/CYdZu21ngldLCF/vtjuqYq66chp8wcqGCe4WTBWXgNJVkikrJOw71M67CwrCJnZoH61D4G6LPcg0w42+/zqTyyVMVWffDsALkyg0PZXnE7D+CoOFgYRA0Ti7ae8QzNw3JfjSBXdCJNw5kVrK3vTlvg4D7NA83nCms9JzPvovMMvwUJqMZZ7BzbhL+1QRquqUb6C4EG5vAa7TXUNEQ7i6RmTX6Vl82MvQPPntMvYmkIOc8t/3lagDDBFrI3BLaJTaqsqKhwRXOlGbXypw/58ISCIrGIdGYBiz+Nai9JV+R3eGO+Cr6H/pb8kUC5viBQqbS/ooRZDWqk4Cz7IBRKoE+OeWrDqfOktCH4PRw1lheeCdPuY0lzr19DU="      
   file_glob: true
