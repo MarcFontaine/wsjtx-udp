@@ -1,8 +1,11 @@
-# WSJT-X UDP Server
+WSJT-X UDP Server
+=================
 
-[![Build Status](https://travis-ci.org/MarcFontaine/wsjtx-udp.svg?branch=master)](https://travis-ci.org/MarcFontaine/wsjtx-udp)
-[![Build status](https://ci.appveyor.com/api/projects/status/few8e9b1c8m77o61/branch/master?svg=true)](https://ci.appveyor.com/project/MarcFontaine/wsjtx-udp/branch/master)
-
+[![Available on Hackage][badge-hackage]][hackage]
+[![License BSD3][badge-license]][license]
+[![Build Status][badge-travis]][travis]
+[![AppVeyor][badge-appveyor]][appveyor]
+[![Windows Binary Release][badge-github-releases]][github-releases]
 
 This library provides:
 
@@ -13,3 +16,15 @@ This library provides:
 
 The executable wsjtx-dump-udp
 dumps all incoming UDP-packages to std-out (in JSON format).
+
+
+[travis]: https://travis-ci.org/MarcFontaine/wsjtx-udp
+[badge-travis]: https://img.shields.io/travis/MarcFontaine/wsjtx-udp.svg?label=Linux%20build
+[appveyor]: https://ci.appveyor.com/project/MarcFontaine/wsjtx-udp/branch/master
+[badge-appveyor]: https://img.shields.io/appveyor/ci/MarcFontaine/wsjtx-udp.svg?label=Windows%20build
+[badge-github-releases]: https://img.shields.io/github/release/MarcFontaine/wsjtx-udp.svg?label=Windows%20Binary
+[github-releases]: https://github.com/MarcFontaine/wsjtx-udp/releases
+[badge-license]: https://img.shields.io/badge/license-BSD3-green.svg
+[license]: https://github.com/MarcFontaine/wsjtx-udp/blob/master/LICENSE
+[hackage]: https://hackage.haskell.org/package/wsjtx-udp
+[badge-hackage]: https://img.shields.io/hackage/v/wsjtx-udp.svg

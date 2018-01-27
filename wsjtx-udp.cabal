@@ -8,7 +8,7 @@ license:             BSD3
 license-file:        LICENSE
 author:              Marc Fontaine
 maintainer:          Marc.Fontaine@gmx.de
-category:            HAM, Network, IoT
+category:            ham-radio, wsjtx
 homepage:            https://github.com/MarcFontaine/wsjtx-udp
 extra-source-files:  README.md
 build-type:          Simple
