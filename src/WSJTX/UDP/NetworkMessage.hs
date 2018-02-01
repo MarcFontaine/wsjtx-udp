@@ -32,6 +32,7 @@ data Heartbeat = Heartbeat {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Heartbeat where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Heartbeat where 
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -57,6 +58,7 @@ data Status = Status {
 } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Status where
+  toJSON = genericToJSON defaultOptions  
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Status where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -73,6 +75,7 @@ data Decode = Decode {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Decode where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Decode where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -82,6 +85,7 @@ data Clear = Clear {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Clear where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Clear where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -96,6 +100,7 @@ data Reply = Reply {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Reply where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Reply where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -116,6 +121,7 @@ data Logged = Logged {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Logged where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Logged where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -125,6 +131,7 @@ data Close = Close {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Close where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Close where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -135,6 +142,7 @@ data Replay = Replay {
   deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Replay where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON Replay where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -145,6 +153,7 @@ data HaltTx = HaltTx {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON HaltTx where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON HaltTx where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -156,6 +165,7 @@ data FreeText = FreeText {
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON FreeText where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
 instance FromJSON FreeText where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
@@ -175,6 +185,7 @@ data Package
   deriving (Read, Show, Eq, Generic)  
 
 instance ToJSON Package where
+  toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding defaultOptions
 instance FromJSON Package where
   parseJSON = genericParseJSON defaultOptions
