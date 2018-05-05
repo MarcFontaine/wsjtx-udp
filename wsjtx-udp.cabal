@@ -3,7 +3,7 @@ synopsis:            WSJT-X UDP protocol
 description:
   Utilities for the WSJT-X UDP protocol.
   Encoding and decoding USP packages to binary and JSON and a UDP server.
-version:             0.1.3.1
+version:             0.1.3.2
 license:             BSD3
 license-file:        LICENSE
 author:              Marc Fontaine
@@ -27,19 +27,20 @@ library
     , bytestring
     , text
     , time
---    , microlens
---    , microlens-th
     , aeson
     , network >=2.6.3.2
     , binary
     , binary-parsers
 
   hs-source-dirs: src
-  exposed-modules:
-      WSJTX.UDP.NetworkMessage
-    , WSJTX.Report                 
-    , WSJTX.UDP.EncodeQt
-    , WSJTX.UDP.Server
+  if impl(ghcjs)
+      exposed-modules: WSJTX.Report
+  else
+      exposed-modules:
+          WSJTX.UDP.NetworkMessage
+        , WSJTX.Report
+        , WSJTX.UDP.EncodeQt
+        , WSJTX.UDP.Server
 
 executable wsjtx-dump-udp
   main-is:          WsjtxDumpUDP.hs

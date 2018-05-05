@@ -29,7 +29,7 @@ import Data.ByteString as BS
 import Data.ByteString.Lazy as BSL (fromStrict, toStrict)
 import GHC.Generics
 import Data.Binary.Get
-import Data.Binary.Put
+import Data.Binary.Put (Put, putWord8, putByteString, runPut, putWord64be, putInt32be, putWord32be, putDoublebe)
 import Data.Binary.Parser.Word8 (word8)
 import Control.Monad
 
