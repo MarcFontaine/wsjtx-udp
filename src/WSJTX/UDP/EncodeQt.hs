@@ -133,7 +133,7 @@ parseUDPPackage bs
           _ -> mzero
 
     pc :: (Generic b1, FromQt' (Rep b1)) => (b1 -> Package) -> Get Package
-    pc constr = (constr . to) <$> fromQt' 
+    pc constr = constr . to <$> fromQt' 
          
     qtMagicWord :: Get ()
     qtMagicWord = do

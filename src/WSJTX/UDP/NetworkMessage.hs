@@ -12,7 +12,6 @@
 -- See NetworkMessage.hpp in WSJT-X sources.
 
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE TemplateHaskell #-}
 module WSJTX.UDP.NetworkMessage
 where
 
