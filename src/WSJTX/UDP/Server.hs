@@ -28,11 +28,11 @@ import Network.Socket.ByteString (send, recv , recvFrom)
 import WSJTX.UDP.NetworkMessage
 import WSJTX.UDP.EncodeQt (packageToUDP, parseUDPPackage)
 
-defaultPort :: PortNumber
-defaultPort = 2237
+wsjtxDefaultPort :: PortNumber
+wsjtxDefaultPort = 2237
 
 testDump :: IO ()
-testDump = withWsjtxSocket defaultPort $ \sock -> do
+testDump = withWsjtxSocket wsjtxDefaultPort $ \sock -> do
   _threadId <- forkWsjtxServer sock print
   void getLine
   
