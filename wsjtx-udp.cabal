@@ -22,28 +22,24 @@ library
   default-language  : Haskell2010
   ghc-options       : -Wall -fno-warn-orphans
   default-extensions: TemplateHaskell
-  build-depends:
-      base  >= 4 && < 5
-    , bytestring
-    , text
-    , time
-    , aeson
-    , network >=2.6.3.2
-    , binary
-    , binary-parsers
+  build-depends:      base  >= 4 && < 5
+  build-depends:      bytestring
+  build-depends:      text
+  build-depends:      time
+  build-depends:      aeson
+  build-depends:      network >=2.6.3.2
+  build-depends:      binary
+  build-depends:      binary-parsers
 
   hs-source-dirs: src
-  if impl(ghcjs)
       exposed-modules: WSJTX.Report
-  else
-      exposed-modules:
-          WSJTX.UDP.NetworkMessage
-        , WSJTX.Report
-        , WSJTX.UDP.EncodeQt
-        , WSJTX.UDP.Server
+      exposed-modules: WSJTX.UDP.NetworkMessage
+      exposed-modules: WSJTX.UDP.EncodeQt
+      exposed-modules: WSJTX.UDP.Server
 
 executable wsjtx-dump-udp
   main-is:          WsjtxDumpUDP.hs
+  hs-source-dirs:   test
   if impl(ghcjs)
     buildable: False
   else
@@ -53,4 +49,3 @@ executable wsjtx-dump-udp
 
     ghc-options:      -rtsopts -Wall -O2 -threaded -with-rtsopts=-T
     default-language: Haskell2010
-    hs-source-dirs:   test
