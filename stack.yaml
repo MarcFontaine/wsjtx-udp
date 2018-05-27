@@ -1,5 +1,5 @@
 allow-newer: true
-resolver: nightly-2018-05-27
+resolver: nightly-2018-05-20
 
 packages:
 - .
