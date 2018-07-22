@@ -1,5 +1,5 @@
 allow-newer: true
-- resolver: lts-11.7
+resolver: lts-11.7
 
 packages:
 - .
