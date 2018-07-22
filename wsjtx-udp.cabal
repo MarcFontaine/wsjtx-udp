@@ -27,7 +27,7 @@ library
   build-depends:      text
   build-depends:      time
   build-depends:      aeson
-  build-depends:      network >= 2.7.0.0 
+  build-depends:      network >= 2.7.0.2 
   build-depends:      binary
   build-depends:      binary-parsers
 
