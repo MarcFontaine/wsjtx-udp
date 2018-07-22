@@ -1,5 +1,5 @@
 allow-newer: true
-resolver: nightly-2018-05-20
+  resolver: lts-11.17
 
 packages:
 - .
