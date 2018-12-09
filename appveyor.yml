@@ -23,6 +23,7 @@ environment:
     PATH: "%PATH%;%APPDATA%\\local\\bin"
 
     STACK_ROOT: "c:\\sr"
+    TMP: "c:\\tmp"
     LOCAL_BIN: "%APPDATA%\\local\\bin"
 
 cache:
