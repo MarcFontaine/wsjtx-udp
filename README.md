@@ -14,10 +14,12 @@ This library provides:
 * UDP Server for receiving messages from WSJT-X and sending to WSJT-X.
 * JSON instances for network messages.
 
-The executable wsjtx-dump-udp
-dumps all incoming UDP-packages to std-out (in JSON format).
-
-
+`wsjtx-dump-udp` is a simple executable that shows how to use the library.
+`wsjtx-dump-udp` implements a UDP server that receives packages from WSJT-X and prints each
+received package to STDOUT (in a Haskell specific format).
+A more interesting application based on the wsjtx-udp library is available on
+[GitHub](https://github.com/MarcFontaine).
+ 
 [travis]: https://travis-ci.org/MarcFontaine/wsjtx-udp
 [badge-travis]: https://img.shields.io/travis/MarcFontaine/wsjtx-udp.svg?label=Linux%20build
 [appveyor]: https://ci.appveyor.com/project/MarcFontaine/wsjtx-udp/branch/master

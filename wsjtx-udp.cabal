@@ -10,7 +10,7 @@ author:              Marc Fontaine
 maintainer:          Marc.Fontaine@gmx.de
 category:            ham-radio, wsjtx
 homepage:            https://github.com/MarcFontaine/wsjtx-udp
-extra-source-files:  README.md
+extra-source-files:  README.md CHANGELOG.md
 build-type:          Simple
 cabal-version:       >=1.10
 
