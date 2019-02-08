@@ -1,13 +1,13 @@
-{ compiler   ? "ghc844"
+{ compiler   ? "ghc863"
 , haddock    ? false
 , test       ? false
 , benchmarks ? false
-, nixpkgs ? import <nixpkgs> {}
+, pkgs       ? import <nixpkgs> {}
 }:
 with builtins;
 let
-  lib         = nixpkgs.haskell.lib;
-  callPackage = nixpkgs.haskell.packages.${compiler}.callPackage;
+  lib         = pkgs.haskell.lib;
+  callPackage = pkgs.haskell.packages.${compiler}.callPackage;
 
   doHaddock = if haddock
     then lib.doHaddock
@@ -17,7 +17,7 @@ let
     else lib.dontCheck;
   doBench = if benchmarks
     then lib.doBenchmark
-    else nixpkgs.lib.id;
+    else pkgs.lib.id;
 
   myPackage = doHaddock(doTest(doBench(
     callPackage ./wsjtx-udp.nix {}
