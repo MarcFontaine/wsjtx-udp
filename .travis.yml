@@ -6,7 +6,7 @@ script:
 - cachix use mafo
 - nix-build -o result-wsjtx-udp --argstr compiler $COMPILER default.nix
 - nix-build -o result-wsjtx-udp-static default-static.nix
-- cp result-wsjtx-udp-static/bin/wsjtx-udp wsjtx-udp_linux-x64-static
+- cp /home/travis/build/MarcFontaine/wsjtx-udp/result-wsjtx-udp-static/bin/wsjtx-udp /home/travis/build/MarcFontaine/wsjtx-udp/wsjtx-udp_linux-x64-static
 after_success:
 - cachix push mafo ./result-wsjtx-udp
 - cachix push mafo ./result-wsjtx-udp-static
