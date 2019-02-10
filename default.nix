@@ -6,21 +6,19 @@
 }:
 with builtins;
 let
-  lib         = pkgs.haskell.lib;
-  callPackage = pkgs.haskell.packages.${compiler}.callPackage;
 
-  doHaddock = if haddock
-    then lib.doHaddock
-    else lib.dontHaddock;
-  doTest = if test
-    then lib.doCheck
-    else lib.dontCheck;
-  doBench = if benchmarks
-    then lib.doBenchmark
-    else pkgs.lib.id;
+  lib       = pkgs.haskell.lib;
+  setTargets  = package:
+    (let
 
-  myPackage = doHaddock(doTest(doBench(
-    callPackage ./wsjtx-udp.nix {}
-    )));
-in { inherit myPackage; }
+      doHaddock = if haddock    then lib.doHaddock   else lib.dontHaddock;
+      doTest    = if test       then lib.doCheck     else lib.dontCheck;
+      doBench   = if benchmarks then lib.doBenchmark else x: x;
+     in
+      doHaddock(doTest(doBench package))
+    );
 
+  wsjtx-udp = setTargets (pkgs.haskell.packages.${compiler}.callPackage ./wsjtx-udp.nix {});
+
+in
+  { inherit wsjtx-udp; }

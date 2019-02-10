@@ -1,15 +1,15 @@
-{ compiler   ? "ghc844"
+{ compiler   ? "ghc863"
 , haddock    ? true
 , test       ? true
 , benchmarks ? false
-, nixpkgs    ? import <nixpkgs> {}
+, pkgs       ? import <nixpkgs> {}
 }:
 with builtins;
 let
   default = import ./default.nix  {inherit compiler haddock test benchmarks pkgs;};
 in
-    if nixpkgs.lib.inNixShell
-      then default.myPackage.env
-      else default.myPackage
+    if pkgs.lib.inNixShell
+      then default.wsjtx-udp.env
+      else default.wsjtx-udp
 
 
