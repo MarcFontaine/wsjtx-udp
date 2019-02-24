@@ -26,7 +26,7 @@ import Network.Socket hiding (send, recv, recvFrom)
 import Network.Socket.ByteString (send, recv , recvFrom)
 
 import WSJTX.UDP.NetworkMessage
-import WSJTX.UDP.EncodeQt (packageToUDP, parseUDPPackage)
+import WSJTX.UDP.EncodeQt (packetToUDP, parseUDPPacket)
 
 wsjtxDefaultPort :: PortNumber
 wsjtxDefaultPort = 2237
@@ -40,10 +40,10 @@ withWsjtxSocket :: PortNumber -> (Socket -> IO a) -> IO a
 withWsjtxSocket port
   = bracket (openSocket port) close
          
-forkWsjtxServer :: Socket -> (Package -> IO ()) -> IO ThreadId
+forkWsjtxServer :: Socket -> (Packet -> IO ()) -> IO ThreadId
 forkWsjtxServer conn callback = forkIO $ forever $ do
   msg <- recv conn 1024
-  callback $  parseUDPPackage msg 
+  callback $  parseUDPPacket msg
 
 openSocket :: PortNumber -> IO Socket
 openSocket udpPort = do
@@ -51,8 +51,8 @@ openSocket udpPort = do
   bind sock $ SockAddrInet udpPort (tupleToHostAddress (127,0,0,1))
   return sock
 
-replyWithPackages :: PortNumber -> [Package] -> IO ()
-replyWithPackages udpPort packages = bracket
+replyWithPackets :: PortNumber -> [Packet] -> IO ()
+replyWithPackets udpPort packets = bracket
   (do
      sock <- socket AF_INET Datagram defaultProtocol
      bind sock $ SockAddrInet udpPort (tupleToHostAddress (127,0,0,1))
@@ -62,4 +62,4 @@ replyWithPackages udpPort packages = bracket
      return sock
    )
    close
-   (\sock -> forM_ packages (send sock . packageToUDP))
+   (\sock -> forM_ packets (send sock . packetToUDP))

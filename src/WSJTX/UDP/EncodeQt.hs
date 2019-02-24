@@ -108,14 +108,14 @@ instance FromQt DiffTime where
     t <- getWord32be
     return $ picosecondsToDiffTime (fromIntegral t * 1000000000)
 
-parseUDPPackage :: BS.ByteString -> Package
-parseUDPPackage bs
-  = case runGetOrFail package $ BSL.fromStrict bs of
-        Left _x -> OtherPackage $ BS.unpack bs
+parseUDPPacket :: BS.ByteString -> Packet
+parseUDPPacket bs
+  = case runGetOrFail packet $ BSL.fromStrict bs of
+        Left _x -> OtherPacket $ BS.unpack bs
         Right (_,_,res) -> res
   where
-    package :: Get Package
-    package = do
+    packet :: Get Packet
+    packet = do
       qtMagicWord
       schema <- getWord32be
       when (schema /= 2) mzero
@@ -132,7 +132,7 @@ parseUDPPackage bs
           9 -> pc PFreeText
           _ -> mzero
 
-    pc :: (Generic b1, FromQt' (Rep b1)) => (b1 -> Package) -> Get Package
+    pc :: (Generic b1, FromQt' (Rep b1)) => (b1 -> Packet) -> Get Packet
     pc constr = constr . to <$> fromQt' 
          
     qtMagicWord :: Get ()
@@ -143,11 +143,11 @@ parseUDPPackage bs
        word8 0xDA
 
 
-packageToUDP :: Package -> BS.ByteString
-packageToUDP p
-  = BSL.toStrict $ runPut package
+packetToUDP :: Packet -> BS.ByteString
+packetToUDP p
+  = BSL.toStrict $ runPut packet
   where
-    package = case p of
+    packet = case p of
         PHeartbeat x -> pt 0 x
         PStatus x -> pt 1 x
         PDecode x -> pt 2 x        
@@ -158,7 +158,7 @@ packageToUDP p
         PReplay x  -> pt 7 x
         PHaltTx x  -> pt 8 x
         PFreeText x -> pt 9 x
-        OtherPackage l -> putByteString $ BS.pack l
+        OtherPacket l -> putByteString $ BS.pack l
            
     pt :: (Generic b1, ToQt' (Rep b1)) => Word32 -> b1 -> Put
     pt tag x = do

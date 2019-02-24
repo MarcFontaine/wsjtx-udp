@@ -169,7 +169,7 @@ instance ToJSON FreeText where
 instance FromJSON FreeText where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
 
-data Package
+data Packet
   = PHeartbeat Heartbeat
   | PStatus Status
   | PDecode Decode
@@ -180,13 +180,13 @@ data Package
   | PReplay Replay
   | PHaltTx HaltTx
   | PFreeText FreeText
-  | OtherPackage [Word8] 
+  | OtherPacket [Word8]
   deriving (Read, Show, Eq, Generic)  
 
-instance ToJSON Package where
+instance ToJSON Packet where
   toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding defaultOptions
-instance FromJSON Package where
+instance FromJSON Packet where
   parseJSON = genericParseJSON defaultOptions
   
 instance Read DiffTime where
