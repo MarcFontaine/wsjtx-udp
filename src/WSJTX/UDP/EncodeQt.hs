@@ -45,8 +45,11 @@ class ToQt' f where
 
 instance ToQt Word32 where toQt = putWord32be
 instance ToQt Int where toQt = putInt32be . fromIntegral
-instance ToQt Word64 where toQt = putWord64be
 instance ToQt Double where toQt = putDoublebe
+
+instance ToQt DialFrequency where toQt = putWord64be . unDialFrequency
+instance ToQt DateTime where toQt = putWord64be . unDateTime
+
 instance ToQt Bool where
   toQt True = putWord8 1
   toQt False = putWord8 0
@@ -96,12 +99,14 @@ instance FromQt Text where
 
 instance FromQt Word32 where fromQt = getWord32be
 instance FromQt Int where fromQt = fmap fromIntegral  getInt32be
-instance FromQt Word64 where fromQt = getWord64be
 instance FromQt Double where fromQt = getDoublebe
 instance FromQt Bool where
   fromQt = do
     f <- getWord8
     if f ==0 then return False else return True
+
+instance FromQt DialFrequency where fromQt = DialFrequency <$> getWord64be
+instance FromQt DateTime where fromQt = DateTime <$> getWord64be
 
 instance FromQt DiffTime where
   fromQt = do

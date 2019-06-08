@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.NetworkMessage
--- Copyright   :  (c) Marc Fontaine 2017-2018
+-- Copyright   :  (c) Marc Fontaine 2017-2019
 -- License     :  BSD3
 -- 
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -38,7 +38,7 @@ instance FromJSON Heartbeat where
 
 data Status = Status {
     status_client_id :: Text
-  , status_dial_frequency :: Word64
+  , status_dial_frequency :: DialFrequency
   , status_mode :: Text
   , status_dx_call :: Text
   , status_report :: Text
@@ -106,17 +106,17 @@ instance FromJSON Reply where
   
 data Logged = Logged {
     logged_client_id :: Text
-  , logged_date_time_off :: Word64
+  , logged_date_time_off :: DateTime
   , logged_dx_call :: Text
   , logged_dx_grid :: Text
-  , logged_dial_frequency :: Word64
+  , logged_dial_frequency :: DialFrequency
   , logged_mode :: Text
   , logged_report_send :: Text
   , logged_report_received :: Text
   , logged_tx_power :: Text
   , logged_comments :: Text
   , logged_name :: Text
-  , logged_date_time_on :: Word64
+  , logged_date_time_on :: DateTime
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Logged where
@@ -197,6 +197,27 @@ instance Read DiffTime where
       f :: Pico
       r :: String
       (f,r) = Prelude.head $ readsPrec p input
+
+
+newtype DialFrequency
+  = DialFrequency {unDialFrequency :: Word64}
+  deriving (Read, Show, Eq, Generic)
+
+instance ToJSON DialFrequency where
+  toJSON = genericToJSON defaultOptions
+  toEncoding = genericToEncoding defaultOptions
+instance FromJSON DialFrequency where
+  parseJSON = genericParseJSON defaultOptions
+
+newtype DateTime
+  = DateTime {unDateTime :: Word64}
+  deriving (Read, Show, Eq, Generic)
+
+instance ToJSON DateTime where
+  toJSON = genericToJSON defaultOptions
+  toEncoding = genericToEncoding defaultOptions
+instance FromJSON DateTime where
+  parseJSON = genericParseJSON defaultOptions
 
 aesonOptionsDropPrefix :: Options
 aesonOptionsDropPrefix
