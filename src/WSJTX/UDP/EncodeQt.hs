@@ -92,6 +92,7 @@ class FromQt a where
 instance FromQt Text where
   fromQt = do
     len <- getWord32be
+-- todo: limit the size of the string
     if len == 0xffffffff then return Text.empty
        else do
          bs <- getByteString $ fromIntegral len
