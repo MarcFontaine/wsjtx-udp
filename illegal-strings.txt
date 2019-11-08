@@ -1,0 +1,2 @@
+when reading packages the size of strings must be checked and
+limited
