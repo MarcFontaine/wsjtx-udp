@@ -6,7 +6,6 @@
 }:
 with builtins;
 let
-
   lib        = pkgs.haskell.lib;
   setTargets = package:
     (let

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.Server
--- Copyright   :  (c) Marc Fontaine 2017-2018
+-- Copyright   :  (c) Marc Fontaine 2017-2020
 -- License     :  BSD3
 -- 
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -31,6 +31,10 @@ import WSJTX.UDP.EncodeQt (packetToUDP, parseUDPPacket)
 wsjtxDefaultPort :: PortNumber
 wsjtxDefaultPort = 2237
 
+serverAddr :: HostAddress
+serverAddr = tupleToHostAddress (0,0,0,0)
+-- serverAddr = tupleToHostAddress (127,0,0,1)
+
 testDump :: IO ()
 testDump = withWsjtxSocket wsjtxDefaultPort $ \sock -> do
   _threadId <- forkWsjtxServer sock print
@@ -48,14 +52,14 @@ forkWsjtxServer conn callback = forkIO $ forever $ do
 openSocket :: PortNumber -> IO Socket
 openSocket udpPort = do
   sock <- socket AF_INET Datagram defaultProtocol
-  bind sock $ SockAddrInet udpPort (tupleToHostAddress (127,0,0,1))
+  bind sock $ SockAddrInet udpPort serverAddr
   return sock
 
 replyWithPackets :: PortNumber -> [Packet] -> IO ()
 replyWithPackets udpPort packets = bracket
   (do
      sock <- socket AF_INET Datagram defaultProtocol
-     bind sock $ SockAddrInet udpPort (tupleToHostAddress (127,0,0,1))
+     bind sock $ SockAddrInet udpPort serverAddr
 -- wait for a package from the client to find out the address
      (_,addr) <- recvFrom sock 1024
      connect sock addr
