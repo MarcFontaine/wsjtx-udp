@@ -1,4 +1,4 @@
-{ mkDerivation, aeson, base, binary, binary-parsers, bytestring
+{ mkDerivation, lib, aeson, base, binary, binary-parsers, bytestring
 , network, stdenv, text, time
 }:
 mkDerivation {
@@ -13,5 +13,5 @@ mkDerivation {
   executableHaskellDepends = [ base ];
   homepage = "https://github.com/MarcFontaine/wsjtx-udp";
   description = "WSJT-X UDP protocol";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }

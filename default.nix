@@ -1,4 +1,4 @@
-{ compiler   ? "ghc864"
+{ compiler   ? "ghc901"
 , haddock    ? false
 , test       ? false
 , benchmarks ? false
@@ -7,8 +7,8 @@
 with builtins;
 let
 
-  lib       = pkgs.haskell.lib;
-  setTargets  = package:
+  lib        = pkgs.haskell.lib;
+  setTargets = package:
     (let
 
       doHaddock = if haddock    then lib.doHaddock   else lib.dontHaddock;

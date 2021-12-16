@@ -15,7 +15,6 @@
 module WSJTX.UDP.NetworkMessage
 where
 
-import Data.Fixed
 import Data.Word
 import Data.Text as Text (Text)
 import Data.Time
@@ -188,16 +187,6 @@ instance ToJSON Packet where
   toEncoding = genericToEncoding defaultOptions
 instance FromJSON Packet where
   parseJSON = genericParseJSON defaultOptions
-  
-instance Read DiffTime where
-  readsPrec p input
-     = [(picosecondsToDiffTime $ floor (f*1000000000000)
-        ,Prelude.tail r)]
-    where
-      f :: Pico
-      r :: String
-      (f,r) = Prelude.head $ readsPrec p input
-
 
 newtype DialFrequency
   = DialFrequency {unDialFrequency :: Word64}
