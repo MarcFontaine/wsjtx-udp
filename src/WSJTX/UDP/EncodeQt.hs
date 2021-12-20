@@ -22,6 +22,7 @@
 module WSJTX.UDP.EncodeQt
 where
 import Data.Word
+import Data.Ratio
 import Data.Text as Text
 import Data.Text.Encoding as Text
 import Data.Time
@@ -54,9 +55,8 @@ instance ToQt Bool where
   toQt True = putWord8 1
   toQt False = putWord8 0
 
-instance ToQt DiffTime where
-  toQt t = putWord32be $ fromIntegral (diffTimeToPicoseconds t `div` 1000000000)
-
+instance ToQt NominalDiffTime where
+  toQt t = putWord32be $ round $ nominalDiffTimeToSeconds t
 instance ToQt Text where
   toQt txt = do
     let bs = Text.encodeUtf8 txt
@@ -92,7 +92,7 @@ class FromQt a where
 instance FromQt Text where
   fromQt = do
     len <- getWord32be
--- todo: limit the size of the string
+    when (len > 1000) $ fail $ "FromQt Text: String length > 1000 : len: " ++ show len
     if len == 0xffffffff then return Text.empty
        else do
          bs <- getByteString $ fromIntegral len
@@ -109,10 +109,10 @@ instance FromQt Bool where
 instance FromQt DialFrequency where fromQt = DialFrequency <$> getWord64be
 instance FromQt DateTime where fromQt = DateTime <$> getWord64be
 
-instance FromQt DiffTime where
+instance FromQt NominalDiffTime where
   fromQt = do
     t <- getWord32be
-    return $ picosecondsToDiffTime (fromIntegral t * 1000000000)
+    return $ secondsToNominalDiffTime $ fromRational $ (fromIntegral t % 1000000000)
 
 parseUDPPacket :: BS.ByteString -> Packet
 parseUDPPacket bs

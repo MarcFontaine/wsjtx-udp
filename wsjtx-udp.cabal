@@ -3,7 +3,7 @@ synopsis:            WSJT-X UDP protocol
 description:
   Utilities for the WSJT-X UDP protocol.
   Encoding and decoding USP packages to binary and JSON and a UDP server.
-version:             0.3.0.0
+version:             0.3.1.0
 license:             BSD3
 license-file:        LICENSE
 author:              Marc Fontaine
@@ -50,3 +50,14 @@ executable wsjtx-dump-udp
 
     ghc-options:      -rtsopts -Wall -O2 -threaded -with-rtsopts=-T
     default-language: Haskell2010
+
+executable wsjtx-to-db
+  main-is:          WsjtxToDB.hs
+  hs-source-dirs:   demo
+  build-depends:
+        base  >= 4 && < 5
+      , network
+      , postgresql-simple
+      , wsjtx-udp
+  ghc-options:      -rtsopts -Wall -O2 -threaded -with-rtsopts=-T
+  default-language: Haskell2010

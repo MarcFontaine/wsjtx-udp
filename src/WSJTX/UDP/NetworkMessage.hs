@@ -64,7 +64,7 @@ instance FromJSON Status where
 data Decode = Decode {
     decode_client_id :: Text
   , decode_new :: Bool
-  , decode_time :: DiffTime
+  , decode_time :: NominalDiffTime
   , decode_snr  :: Int
   , decode_delta_time :: Double
   , decode_delta_frequency :: Word32
@@ -90,7 +90,7 @@ instance FromJSON Clear where
 
 data Reply = Reply {
    reply_client_id :: Text
-  ,reply_time :: DiffTime 
+  ,reply_time :: NominalDiffTime 
   ,reply_reply_snr :: Word32
   ,reply_delta_time :: Double
   ,reply_mode :: Text

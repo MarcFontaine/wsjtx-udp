@@ -31,32 +31,31 @@ import WSJTX.UDP.EncodeQt (packetToUDP, parseUDPPacket)
 wsjtxDefaultPort :: PortNumber
 wsjtxDefaultPort = 2237
 
-serverAddr :: HostAddress
-serverAddr = tupleToHostAddress (0,0,0,0)
--- serverAddr = tupleToHostAddress (127,0,0,1)
+wsjtxDefaultAddr :: HostAddress
+wsjtxDefaultAddr = tupleToHostAddress (0,0,0,0)
 
 testDump :: IO ()
-testDump = withWsjtxSocket wsjtxDefaultPort $ \sock -> do
+testDump = withWsjtxSocket (wsjtxDefaultAddr, wsjtxDefaultPort) $ \sock -> do
   _threadId <- forkWsjtxServer sock print
   void getLine
-  
-withWsjtxSocket :: PortNumber -> (Socket -> IO a) -> IO a
-withWsjtxSocket port
-  = bracket (openSocket port) close
+
+withWsjtxSocket :: (HostAddress, PortNumber) -> (Socket -> IO a) -> IO a
+withWsjtxSocket addrPort
+  = bracket (openSocket addrPort) close
          
 forkWsjtxServer :: Socket -> (Packet -> IO ()) -> IO ThreadId
 forkWsjtxServer conn callback = forkIO $ forever $ do
   msg <- recv conn 1024
   callback $  parseUDPPacket msg
 
-openSocket :: PortNumber -> IO Socket
-openSocket udpPort = do
+openSocket :: (HostAddress, PortNumber) -> IO Socket
+openSocket (serverAddr, udpPort) = do
   sock <- socket AF_INET Datagram defaultProtocol
   bind sock $ SockAddrInet udpPort serverAddr
   return sock
 
-replyWithPackets :: PortNumber -> [Packet] -> IO ()
-replyWithPackets udpPort packets = bracket
+replyWithPackets :: (HostAddress, PortNumber) -> [Packet] -> IO ()
+replyWithPackets (serverAddr, udpPort) packets = bracket
   (do
      sock <- socket AF_INET Datagram defaultProtocol
      bind sock $ SockAddrInet udpPort serverAddr
