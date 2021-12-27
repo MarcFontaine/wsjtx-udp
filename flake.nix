@@ -8,5 +8,6 @@
     {
     packages.x86_64-linux.wsjtx-udp = (import ./default.nix {inherit pkgs;}).wsjtx-udp;
     defaultPackage.x86_64-linux = self.packages.x86_64-linux.wsjtx-udp;
+    overlay = final: prev: { wsjtx-udp = self.packages.x86_64-linux.wsjtx-udp; };
   };
 }
