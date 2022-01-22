@@ -28,7 +28,7 @@ wsjtxAddr = tupleToHostAddress (0,0,0,0)
 main :: IO ()
 main = do
  conn <- connectPostgreSQL "" -- Reads from ENV: PGHOST,PGUSER,PGPASSWORD
- withWsjtxSocket (wsjtxAddr,wsjtxPort) $ \sock -> do
+ void $ withWsjtxSocket (wsjtxAddr,wsjtxPort) $ \sock -> do
    void $ forkWsjtxServer sock (dbWrite conn)
    forever $ threadDelay 100000000
  return ()

@@ -1,9 +1,9 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.Server
--- Copyright   :  (c) Marc Fontaine 2017-2020
+-- Copyright   :  (c) Marc Fontaine 2017-2022
 -- License     :  BSD3
--- 
+--
 -- Maintainer  :  Marc.Fontaine@gmx.de
 -- Stability   :  experimental
 -- Portability :  GHC-only
@@ -35,7 +35,7 @@ wsjtxDefaultAddr :: HostAddress
 wsjtxDefaultAddr = tupleToHostAddress (0,0,0,0)
 
 testDump :: IO ()
-testDump = withWsjtxSocket (wsjtxDefaultAddr, wsjtxDefaultPort) $ \sock -> do
+testDump = void $ withWsjtxSocket (wsjtxDefaultAddr, wsjtxDefaultPort) $ \sock -> do
   _threadId <- forkWsjtxServer sock print
   void getLine
 
