@@ -22,7 +22,7 @@ import Control.Monad
 import Control.Concurrent
 
 import Control.Exception.Base (bracket)
-import Network.Socket
+import Network.Socket hiding (openSocket)
 import Network.Socket.ByteString (send, recv , recvFrom)
 
 import WSJTX.UDP.NetworkMessage

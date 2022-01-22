@@ -5,15 +5,18 @@
 -- Portability :  GHC-only
 --
 -- Testapplication
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
-import Control.Monad (void,forever)
-import Control.Concurrent(threadDelay)
+import Data.String (fromString)
+import Control.Monad (void, forever)
+import Control.Concurrent (threadDelay)
+import System.Environment (getArgs)
+
 import Network.Socket
 
 import Database.PostgreSQL.Simple
-import Database.PostgreSQL.Simple.ToRow
 import Database.PostgreSQL.Simple.ToField
 
 import WSJTX.UDP.NetworkMessage
@@ -27,38 +30,26 @@ wsjtxAddr = tupleToHostAddress (0,0,0,0)
 
 main :: IO ()
 main = do
- conn <- connectPostgreSQL "" -- Reads from ENV: PGHOST,PGUSER,PGPASSWORD
- void $ withWsjtxSocket (wsjtxAddr,wsjtxPort) $ \sock -> do
-   void $ forkWsjtxServer sock (dbWrite conn)
-   forever $ threadDelay 100000000
- return ()
+  getArgs >>= \case
+    [ sqlCommand ] -> runServer wsjtxAddr wsjtxPort (fromString sqlCommand)
+    _ -> printUsage
 
-dbWrite :: Connection -> Packet -> IO ()
-dbWrite conn packet = case packet of
+printUsage :: IO ()
+printUsage = do
+  putStrLn "Usage : wsjtx-to-db SQLCMD"
+  putStrLn "Example 'INSERT INTO wsjtx(packet) values (?)'"
+
+runServer :: HostAddress -> PortNumber -> Query -> IO ()
+runServer addr port sqlCommand = do
+  conn <- connectPostgreSQL "" -- Reads from ENV: PGHOST,PGUSER,PGPASSWORD
+  void $ withWsjtxSocket (addr, port) $ \sock -> do
+    void $ forkWsjtxServer sock (dbWrite conn sqlCommand)
+    forever $ threadDelay 100000000
+  return ()
+
+dbWrite :: Connection -> Query -> Packet -> IO ()
+dbWrite conn cmd packet = case packet of
   PDecode p -> do
 --    print p
-    void $ execute conn insertDecode $ DR p
-    return ()
+    void $ execute conn cmd $ Only $ toJSONField p
   _ -> return ()
-  where
-    insertDecode :: Query
-    insertDecode = "INSERT INTO decode(client_id,new,snr,delta_time,delta_frequency,mode,message) values (?,?,?,?,?,?,?)"
-
-newtype DR = DR Decode
-instance ToRow DR where
-  toRow (DR (Decode {..})) = [
-      toField decode_client_id
-    , toField decode_new
---    , toField decode_time
-    , toField decode_snr
-    , toField decode_delta_time
-    , toField decode_delta_frequency
-    , toField decode_mode
-    , toField decode_message
-    ]
-
-{-
-fontaine=> CREATE DATABASE wsjtx;
-\c wsjtx
-CREATE TABLE decode (client_id text, new boolean, time time, snr int, delta_time double precision , delta_frequency integer, mode text, message text);
--}
