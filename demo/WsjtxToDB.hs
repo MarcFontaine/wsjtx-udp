@@ -48,8 +48,5 @@ runServer addr port sqlCommand = do
   return ()
 
 dbWrite :: Connection -> Query -> Packet -> IO ()
-dbWrite conn cmd packet = case packet of
-  PDecode p -> do
---    print p
-    void $ execute conn cmd $ Only $ toJSONField p
-  _ -> return ()
+dbWrite conn cmd packet
+  = void $ execute conn cmd $ Only $ toJSONField packet
