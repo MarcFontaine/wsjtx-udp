@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.NetworkMessage
--- Copyright   :  (c) Marc Fontaine 2017-2019
+-- Copyright   :  (c) Marc Fontaine 2017-2022
 -- License     :  BSD3
 -- 
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -12,14 +12,16 @@
 -- See NetworkMessage.hpp in WSJT-X sources.
 
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 module WSJTX.UDP.NetworkMessage
 where
 
 import Data.Word
-import Data.Text as Text (Text)
+import Data.Text as Text (Text, pack)
 import Data.Time
-import Data.Aeson
+import Data.Aeson as A
 import GHC.Generics
+import Network.Socket (SockAddr)
 --import Lens.Micro.TH
 
 data Heartbeat = Heartbeat {
@@ -169,16 +171,16 @@ instance FromJSON FreeText where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
 
 data Packet
-  = PHeartbeat Heartbeat
-  | PStatus Status
-  | PDecode Decode
-  | PClear Clear
-  | PReply Reply
-  | PLogged Logged
-  | PClose Close
-  | PReplay Replay
-  | PHaltTx HaltTx
-  | PFreeText FreeText
+  = PHeartbeat !Heartbeat
+  | PStatus !Status
+  | PDecode !Decode
+  | PClear !Clear
+  | PReply !Reply
+  | PLogged !Logged
+  | PClose !Close
+  | PReplay !Replay
+  | PHaltTx !HaltTx
+  | PFreeText !FreeText
   | OtherPacket [Word8]
   deriving (Read, Show, Eq, Generic)  
 
@@ -213,6 +215,16 @@ aesonOptionsDropPrefix
   = defaultOptions {
       fieldLabelModifier = tail . dropWhile (not . (==) '_')
     }
+
+data PacketWithAddr = PacketWithAddr !Packet !SockAddr
+  deriving (Show, Eq, Generic)
+
+instance ToJSON PacketWithAddr where
+  toJSON (PacketWithAddr p a) = combined
+    where
+      (Object obj) = toJSON p
+      extra = "SockAddr" .= (A.String $ Text.pack $ show a)
+      combined = Object ( obj <> extra)
 
 {-
 makeFields ''Heartbeat

@@ -1,5 +1,8 @@
 ----------------------------------------------------------------------------
 -- |
+-- Copyright   :  (c) Marc Fontaine 2022
+-- License     :  BSD3
+
 -- Maintainer  :  Marc.Fontaine@gmx.de
 -- Stability   :  experimental
 -- Portability :  GHC-only
@@ -47,6 +50,6 @@ runServer addr port sqlCommand = do
     forever $ threadDelay 100000000
   return ()
 
-dbWrite :: Connection -> Query -> Packet -> IO ()
+dbWrite :: Connection -> Query -> PacketWithAddr -> IO ()
 dbWrite conn cmd packet
   = void $ execute conn cmd $ Only $ toJSONField packet

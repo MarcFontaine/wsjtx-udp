@@ -13,9 +13,7 @@ import Network.Socket
 
 import Data.ByteString.Lazy.Char8 as BSL (putStrLn)
 import Data.Aeson as Aeson
-import Network.Socket
 
-import WSJTX.UDP.NetworkMessage
 import WSJTX.UDP.Server (forkWsjtxServer, withWsjtxSocket)
 
 wsjtxPort :: PortNumber

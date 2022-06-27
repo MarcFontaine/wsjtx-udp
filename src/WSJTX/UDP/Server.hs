@@ -23,7 +23,7 @@ import Control.Concurrent
 
 import Control.Exception.Base (bracket)
 import Network.Socket hiding (openSocket)
-import Network.Socket.ByteString (send, recv , recvFrom)
+import Network.Socket.ByteString (send, recvFrom)
 
 import WSJTX.UDP.NetworkMessage
 import WSJTX.UDP.EncodeQt (packetToUDP, parseUDPPacket)
@@ -43,10 +43,10 @@ withWsjtxSocket :: (HostAddress, PortNumber) -> (Socket -> IO a) -> IO a
 withWsjtxSocket addrPort
   = bracket (openSocket addrPort) close
          
-forkWsjtxServer :: Socket -> (Packet -> IO ()) -> IO ThreadId
-forkWsjtxServer conn callback = forkIO $ forever $ do
-  msg <- recv conn 1024
-  callback $  parseUDPPacket msg
+forkWsjtxServer :: Socket -> (PacketWithAddr -> IO ()) -> IO ThreadId
+forkWsjtxServer sock callback = forkIO $ forever $ do
+  (msg, addr) <- recvFrom sock 1024
+  callback $ PacketWithAddr (parseUDPPacket msg) addr
 
 openSocket :: (HostAddress, PortNumber) -> IO Socket
 openSocket (serverAddr, udpPort) = do
