@@ -52,9 +52,14 @@ data Status = Status {
   , status_de_call :: Text
   , status_de_grid :: Text
   , status_dx_grid :: Text
-  , status_tx_watchdog :: Bool
+  , status_watchdog_timeout :: Bool
   , status_submode :: Text
   , status_fast_mode :: Bool
+  , status_special_op_mode :: Word8
+  , status_frequency_tolerance :: Word32
+  , status_tr_period :: Word32
+  , status_configuration_name :: Text
+  , status_tx_message :: Text
 } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Status where
@@ -72,6 +77,8 @@ data Decode = Decode {
   , decode_delta_frequency :: Word32
   , decode_mode :: Text
   , decode_message :: Text
+  , decode_low_confidence :: Bool
+  , decode_off_air :: Bool
   } deriving (Read, Show, Eq, Generic)
 
 instance ToJSON Decode where
@@ -223,7 +230,7 @@ instance ToJSON PacketWithAddr where
   toJSON (PacketWithAddr p a) = combined
     where
       (Object obj) = toJSON p
-      extra = "SockAddr" .= (A.String $ Text.pack $ show a)
+      extra = "SockAddr" .= A.String (Text.pack $ show a)
       combined = Object ( obj <> extra)
 
 {-

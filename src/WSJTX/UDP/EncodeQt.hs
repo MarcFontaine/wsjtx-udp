@@ -27,7 +27,7 @@ import Data.Text as Text
 import Data.Text.Encoding as Text
 import Data.Time
 import Data.ByteString as BS
-import Data.ByteString.Lazy as BSL (fromStrict, toStrict)
+import qualified Data.ByteString.Lazy as BSL (ByteString, fromStrict, toStrict)
 import GHC.Generics
 import Data.Binary.Get
 import Data.Binary.Put (Put, putWord8, putByteString, runPut, putWord64be, putInt32be, putWord32be, putDoublebe)
@@ -45,6 +45,7 @@ class ToQt' f where
   toQt' :: f p -> Put
 
 instance ToQt Word32 where toQt = putWord32be
+instance ToQt Word8 where toQt = putWord8
 instance ToQt Int where toQt = putInt32be . fromIntegral
 instance ToQt Double where toQt = putDoublebe
 
@@ -92,13 +93,14 @@ class FromQt a where
 instance FromQt Text where
   fromQt = do
     len <- getWord32be
-    when (len > 1000) $ fail $ "FromQt Text: String length > 1000 : len: " ++ show len
     if len == 0xffffffff then return Text.empty
        else do
+         when (len > 1000) $ fail $ "FromQt Text: String length > 1000 : len: " ++ show len
          bs <- getByteString $ fromIntegral len
          return $ Text.decodeUtf8With (\_ _ -> Just '_') bs
 
 instance FromQt Word32 where fromQt = getWord32be
+instance FromQt Word8 where fromQt = getWord8
 instance FromQt Int where fromQt = fmap fromIntegral  getInt32be
 instance FromQt Double where fromQt = getDoublebe
 instance FromQt Bool where
@@ -112,13 +114,18 @@ instance FromQt DateTime where fromQt = DateTime <$> getWord64be
 instance FromQt NominalDiffTime where
   fromQt = do
     t <- getWord32be
-    return $ secondsToNominalDiffTime $ fromRational $ (fromIntegral t % 1000000000)
+    return $ secondsToNominalDiffTime $ fromRational (fromIntegral t % 1000000000)
 
 parseUDPPacket :: BS.ByteString -> Packet
-parseUDPPacket bs
-  = case runGetOrFail packet $ BSL.fromStrict bs of
-        Left _x -> OtherPacket $ BS.unpack bs
-        Right (_,_,res) -> res
+parseUDPPacket bs = case parseUDPPacket2 bs of
+  Left _x -> OtherPacket $ BS.unpack bs
+  Right (_,_,res) -> res
+
+parseUDPPacket2 ::
+     BS.ByteString
+  -> Either (BSL.ByteString, ByteOffset, String)
+            (BSL.ByteString, ByteOffset, Packet)
+parseUDPPacket2 bs = runGetOrFail packet $ BSL.fromStrict bs
   where
     packet :: Get Packet
     packet = do
