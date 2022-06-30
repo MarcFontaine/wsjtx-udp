@@ -202,10 +202,10 @@ newtype DialFrequency
   deriving (Read, Show, Eq, Generic)
 
 instance ToJSON DialFrequency where
-  toJSON = genericToJSON defaultOptions
-  toEncoding = genericToEncoding defaultOptions
+  toJSON (DialFrequency f) = toJSON f
+  
 instance FromJSON DialFrequency where
-  parseJSON = genericParseJSON defaultOptions
+  parseJSON v = DialFrequency <$> parseJSON v
 
 newtype DateTime
   = DateTime {unDateTime :: Word64}
