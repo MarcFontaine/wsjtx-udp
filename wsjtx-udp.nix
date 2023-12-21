@@ -1,14 +1,14 @@
-{ lib, mkDerivation, aeson, base, binary, binary-parsers, bytestring
+{ lib, mkDerivation, aeson, base, binary, bytestring
 , network, postgresql-simple, text, time
 }:
 mkDerivation {
   pname = "wsjtx-udp";
-  version = "0.3.2.0";
+  version = "0.4.0.0";
   src = ./.;
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson base binary binary-parsers bytestring network text time
+    aeson base binary bytestring network text time
   ];
   executableHaskellDepends = [ base network postgresql-simple ];
   homepage = "https://github.com/MarcFontaine/wsjtx-udp";

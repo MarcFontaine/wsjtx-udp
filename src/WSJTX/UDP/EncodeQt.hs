@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.EncodeQt
--- Copyright   :  (c) Marc Fontaine 2017-2018
+-- Copyright   :  (c) Marc Fontaine 2017-2023
 -- License     :  BSD3
 -- 
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -29,9 +29,8 @@ import Data.Time
 import Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BSL (ByteString, fromStrict, toStrict)
 import GHC.Generics
-import Data.Binary.Get
+import Data.Binary.Get (ByteOffset, Get, getByteString, getDoublebe, getInt32be, getWord32be, getWord64be, getWord8, runGetOrFail)
 import Data.Binary.Put (Put, putWord8, putByteString, runPut, putWord64be, putInt32be, putWord32be, putDoublebe)
-import Data.Binary.Parser.Word8 (word8)
 import Control.Monad
 
 import WSJTX.UDP.NetworkMessage as NetworkMessage
@@ -101,7 +100,7 @@ instance FromQt Text where
 
 instance FromQt Word32 where fromQt = getWord32be
 instance FromQt Word8 where fromQt = getWord8
-instance FromQt Int where fromQt = fmap fromIntegral  getInt32be
+instance FromQt Int where fromQt = fmap fromIntegral getInt32be
 instance FromQt Double where fromQt = getDoublebe
 instance FromQt Bool where
   fromQt = do
@@ -150,11 +149,11 @@ parseUDPPacket2 bs = runGetOrFail packet $ BSL.fromStrict bs
          
     qtMagicWord :: Get ()
     qtMagicWord = do
-       word8 0xAD
-       word8 0xBC
-       word8 0xCB
-       word8 0xDA
-
+       0xAD <- getWord8
+       0xBC <- getWord8
+       0xCB <- getWord8
+       0xDA <- getWord8
+       return ()
 
 packetToUDP :: Packet -> BS.ByteString
 packetToUDP p
