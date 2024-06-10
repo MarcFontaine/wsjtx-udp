@@ -1,6 +1,6 @@
 {
   description = "wsjtx-udp as a flake";
-  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-23.11;
+  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-24.05;
   outputs = { self, nixpkgs }:
     let
       pkgs = import nixpkgs { system = "x86_64-linux"; };

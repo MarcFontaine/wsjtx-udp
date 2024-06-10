@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------
 -- |
--- Copyright   :  (c) Marc Fontaine 2022
+-- Copyright   :  (c) Marc Fontaine 2024
 -- License     :  BSD3
 
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -23,7 +23,7 @@ import Database.PostgreSQL.Simple
 import Database.PostgreSQL.Simple.ToField
 
 import WSJTX.UDP.NetworkMessage
-import WSJTX.UDP.Server (forkWsjtxServer, withWsjtxSocket)
+import WSJTX.UDP.Server (runWsjtxServer, withWsjtxSocket)
 
 wsjtxPort :: PortNumber
 wsjtxPort = 2237
@@ -46,9 +46,7 @@ runServer :: HostAddress -> PortNumber -> Query -> IO ()
 runServer addr port sqlCommand = do
   conn <- connectPostgreSQL "" -- Reads from ENV: PGHOST,PGUSER,PGPASSWORD
   void $ withWsjtxSocket (addr, port) $ \sock -> do
-    void $ forkWsjtxServer sock (dbWrite conn sqlCommand)
-    forever $ threadDelay 100000000
-  return ()
+    void $ runWsjtxServer sock (dbWrite conn sqlCommand)
 
 dbWrite :: Connection -> Query -> PacketWithAddr -> IO ()
 dbWrite conn cmd packet

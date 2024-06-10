@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.Server
--- Copyright   :  (c) Marc Fontaine 2017-2022
+-- Copyright   :  (c) Marc Fontaine 2017-2024
 -- License     :  BSD3
 --
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -9,9 +9,11 @@
 -- Portability :  GHC-only
 --
 -- Receive UDP packages from WSJT-X and reply to UDP packages.
+--
+-- Reply to WSJT-X:
 -- The UDP destination port address to reach the WSJT-X application
 -- is the the same address that the WSJT-X uses as source address.
--- (That not the address that is configured in the GUI).
+-- (That is not the address that is configured in the GUI).
 -- This address is only known after the first package is received from WSJT-X.
 -- (WSJT-X regularly sends heard beat packages.)
 
@@ -36,15 +38,15 @@ wsjtxDefaultAddr = tupleToHostAddress (0,0,0,0)
 
 testDump :: IO ()
 testDump = void $ withWsjtxSocket (wsjtxDefaultAddr, wsjtxDefaultPort) $ \sock -> do
-  _threadId <- forkWsjtxServer sock print
+  _threadId <- forkIO $ runWsjtxServer sock print
   void getLine
 
 withWsjtxSocket :: (HostAddress, PortNumber) -> (Socket -> IO a) -> IO a
 withWsjtxSocket addrPort
   = bracket (openSocket addrPort) close
          
-forkWsjtxServer :: Socket -> (PacketWithAddr -> IO ()) -> IO ThreadId
-forkWsjtxServer sock callback = forkIO $ forever $ do
+runWsjtxServer :: Socket -> (PacketWithAddr -> IO ()) -> IO ()
+runWsjtxServer sock callback = forever $ do
   (msg, addr) <- recvFrom sock 1024
   callback $ PacketWithAddr (parseUDPPacket msg) addr
 
