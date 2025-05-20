@@ -3,7 +3,7 @@
 }:
 mkDerivation {
   pname = "wsjtx-udp";
-  version = "0.4.0.0";
+  version = "0.4.1.0";
   src = ./.;
   isLibrary = true;
   isExecutable = true;

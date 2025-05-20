@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.EncodeQt
--- Copyright   :  (c) Marc Fontaine 2017-2023
+-- Copyright   :  (c) Marc Fontaine 2017-2025
 -- License     :  BSD3
 -- 
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -56,7 +56,7 @@ instance ToQt Bool where
   toQt False = putWord8 0
 
 instance ToQt NominalDiffTime where
-  toQt t = putWord32be $ round $ nominalDiffTimeToSeconds t
+  toQt t = putWord32be $ round (1000 * nominalDiffTimeToSeconds t)
 instance ToQt Text where
   toQt txt = do
     let bs = Text.encodeUtf8 txt
@@ -110,10 +110,12 @@ instance FromQt Bool where
 instance FromQt DialFrequency where fromQt = DialFrequency <$> getWord64be
 instance FromQt DateTime where fromQt = DateTime <$> getWord64be
 
+-- QTime counts milliseconds
+-- https://doc.qt.io/qt-5/qtime.html#details
 instance FromQt NominalDiffTime where
   fromQt = do
     t <- getWord32be
-    return $ secondsToNominalDiffTime $ fromRational (fromIntegral t % 1000000000)
+    return $ secondsToNominalDiffTime $ fromRational (fromIntegral t % 1000)
 
 parseUDPPacket :: BS.ByteString -> Packet
 parseUDPPacket bs = case parseUDPPacket2 bs of

@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------
 -- |
--- Copyright   :  (c) Marc Fontaine 2024
+-- Copyright   :  (c) Marc Fontaine 2025
 -- License     :  BSD3
 
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -13,8 +13,7 @@
 {-# LANGUAGE RecordWildCards #-}
 
 import Data.String (fromString)
-import Control.Monad (void, forever)
-import Control.Concurrent (threadDelay)
+import Control.Monad (void)
 import System.Environment (getArgs)
 
 import Network.Socket

@@ -1,2 +1,1 @@
-when reading packages the size of strings must be checked and
-limited
+TODO: When reading packets the sizes of strings must be checked and limited.

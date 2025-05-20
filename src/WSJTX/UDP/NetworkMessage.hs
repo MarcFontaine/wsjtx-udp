@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.NetworkMessage
--- Copyright   :  (c) Marc Fontaine 2017-2022
+-- Copyright   :  (c) Marc Fontaine 2017-2025
 -- License     :  BSD3
 -- 
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -220,7 +220,7 @@ instance FromJSON DateTime where
 aesonOptionsDropPrefix :: Options
 aesonOptionsDropPrefix
   = defaultOptions {
-      fieldLabelModifier = tail . dropWhile (not . (==) '_')
+      fieldLabelModifier = drop 1 . dropWhile (not . (==) '_')
     }
 
 data PacketWithAddr = PacketWithAddr !Packet !SockAddr
@@ -229,7 +229,9 @@ data PacketWithAddr = PacketWithAddr !Packet !SockAddr
 instance ToJSON PacketWithAddr where
   toJSON (PacketWithAddr p a) = combined
     where
-      (Object obj) = toJSON p
+      obj = case toJSON p of
+        Object x -> x
+        _ -> error "unreachable"
       extra = "SockAddr" .= A.String (Text.pack $ show a)
       combined = Object ( obj <> extra)
 

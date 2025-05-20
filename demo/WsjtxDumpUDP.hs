@@ -1,14 +1,13 @@
 ----------------------------------------------------------------------------
 -- |
--- Copyright   :  (c) Marc Fontaine 2017-2024
+-- Copyright   :  (c) Marc Fontaine 2017-2025
 -- License     :  BSD3
 --
 -- Maintainer  :  Marc.Fontaine@gmx.de
 -- Stability   :  experimental
 -- Portability :  GHC-only
 
-import Control.Monad (void,forever)
-import Control.Concurrent(threadDelay)
+import Control.Monad (void)
 import Network.Socket
 
 import Data.ByteString.Lazy.Char8 as BSL (putStrLn)

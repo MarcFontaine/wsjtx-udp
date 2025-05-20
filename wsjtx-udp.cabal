@@ -3,12 +3,12 @@ synopsis:            WSJT-X UDP protocol
 description:
   Utilities for the WSJT-X UDP protocol.
   Encoding and decoding USP packages to binary and JSON and a UDP server.
-version:             0.4.0.0
+version:             0.4.1.0
 license:             BSD3
 license-file:        LICENSE
 author:              Marc Fontaine
 maintainer:          Marc.Fontaine@gmx.de
-category:            ham-radio, wsjtx
+category:            HAM-radio, wsjtx
 homepage:            https://github.com/MarcFontaine/wsjtx-udp
 extra-source-files:  README.md CHANGELOG.md
 build-type:          Simple
@@ -20,7 +20,7 @@ source-repository head
 
 library
   default-language  : Haskell2010
-  ghc-options       : -Wall -fno-warn-orphans
+  ghc-options       : -Wall -Werror -fno-warn-orphans
   default-extensions: TemplateHaskell
   build-depends:      base  >= 4 && < 5
   build-depends:      bytestring
@@ -49,7 +49,7 @@ executable wsjtx-dump-udp
       , network
       , aeson
       , wsjtx-udp
-    ghc-options:      -rtsopts -Wall -O2 -threaded -with-rtsopts=-T
+    ghc-options:      -rtsopts -Wall -Werror -O2 -threaded -with-rtsopts=-T
     default-language: Haskell2010
 
 executable wsjtx-to-db
@@ -60,5 +60,5 @@ executable wsjtx-to-db
       , network
       , postgresql-simple
       , wsjtx-udp
-  ghc-options:      -rtsopts -Wall -O2 -threaded -with-rtsopts=-T
+  ghc-options:      -rtsopts -Wall -Werror -O2 -threaded -with-rtsopts=-T
   default-language: Haskell2010
