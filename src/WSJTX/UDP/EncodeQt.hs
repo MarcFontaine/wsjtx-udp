@@ -3,7 +3,7 @@
 -- Module      :  WSJTX.UDP.EncodeQt
 -- Copyright   :  (c) Marc Fontaine 2017-2025
 -- License     :  BSD3
--- 
+--
 -- Maintainer  :  Marc.Fontaine@gmx.de
 -- Stability   :  experimental
 -- Portability :  GHC-only
@@ -15,36 +15,42 @@
 --  This module only supports the schema 2 protocol.
 
 {-# LANGUAGE DefaultSignatures #-}
-{-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE LambdaCase        #-}
+{-# LANGUAGE TypeOperators     #-}
 
 module WSJTX.UDP.EncodeQt
 where
-import Data.Word
-import Data.Ratio
-import Data.Text as Text
-import Data.Text.Encoding as Text
-import Data.Time
-import Data.ByteString as BS
-import qualified Data.ByteString.Lazy as BSL (ByteString, fromStrict, toStrict)
-import GHC.Generics
-import Data.Binary.Get (ByteOffset, Get, getByteString, getDoublebe, getInt32be, getWord32be, getWord64be, getWord8, runGetOrFail)
-import Data.Binary.Put (Put, putWord8, putByteString, runPut, putWord64be, putInt32be, putWord32be, putDoublebe)
-import Control.Monad
+import           Control.Monad
+import           Data.Binary.Get          (ByteOffset, Get, getByteString,
+                                           getDoublebe, getInt32be, getWord32be,
+                                           getWord64be, getWord8, runGetOrFail)
+import           Data.Binary.Put          (Put, putByteString, putDoublebe,
+                                           putInt32be, putWord32be, putWord64be,
+                                           putWord8, runPut)
+import           Data.ByteString          as BS
+import qualified Data.ByteString.Lazy     as BSL (ByteString, fromStrict,
+                                                  toStrict)
+import           Data.Ratio
+import           Data.Text                as Text
+import           Data.Text.Encoding       as Text
+import           Data.Time
+import           Data.Word
+import           GHC.Generics
 
-import WSJTX.UDP.NetworkMessage as NetworkMessage
+import           WSJTX.UDP.NetworkMessage as NetworkMessage
 
 class ToQt a where
   toQt :: a -> Put
   default toQt :: (Generic a, ToQt' (Rep a)) => a -> Put
   toQt x = toQt' (from x)
-  
+
 class ToQt' f where
   toQt' :: f p -> Put
 
-instance ToQt Word32 where toQt = putWord32be
 instance ToQt Word8 where toQt = putWord8
+instance ToQt Word32 where toQt = putWord32be
+instance ToQt Word64 where toQt = putWord64be
 instance ToQt Int where toQt = putInt32be . fromIntegral
 instance ToQt Double where toQt = putDoublebe
 
@@ -52,7 +58,7 @@ instance ToQt DialFrequency where toQt = putWord64be . unDialFrequency
 instance ToQt DateTime where toQt = putWord64be . unDateTime
 
 instance ToQt Bool where
-  toQt True = putWord8 1
+  toQt True  = putWord8 1
   toQt False = putWord8 0
 
 instance ToQt NominalDiffTime where
@@ -87,7 +93,7 @@ instance (FromQt' f, FromQt' g) => FromQt' (f :*: g)
 class FromQt a where
   fromQt :: Get a
   default fromQt :: (Generic a, FromQt' (Rep a)) =>  Get a
-  fromQt = fmap to fromQt' 
+  fromQt = fmap to fromQt'
 
 instance FromQt Text where
   fromQt = do
@@ -98,8 +104,9 @@ instance FromQt Text where
          bs <- getByteString $ fromIntegral len
          return $ Text.decodeUtf8With (\_ _ -> Just '_') bs
 
-instance FromQt Word32 where fromQt = getWord32be
 instance FromQt Word8 where fromQt = getWord8
+instance FromQt Word32 where fromQt = getWord32be
+instance FromQt Word64 where fromQt = getWord64be
 instance FromQt Int where fromQt = fmap fromIntegral getInt32be
 instance FromQt Double where fromQt = getDoublebe
 instance FromQt Bool where
@@ -119,7 +126,7 @@ instance FromQt NominalDiffTime where
 
 parseUDPPacket :: BS.ByteString -> Packet
 parseUDPPacket bs = case parseUDPPacket2 bs of
-  Left _x -> OtherPacket $ BS.unpack bs
+  Left _x         -> OtherPacket $ BS.unpack bs
   Right (_,_,res) -> res
 
 parseUDPPacket2 ::
@@ -134,7 +141,7 @@ parseUDPPacket2 bs = runGetOrFail packet $ BSL.fromStrict bs
       schema <- getWord32be
       when (schema /= 2) mzero
       getWord32be >>= \case
-          0 -> pc PHeartbeat          
+          0 -> pc PHeartbeat
           1 -> pc PStatus
           2 -> pc PDecode
           3 -> pc PClear
@@ -144,11 +151,17 @@ parseUDPPacket2 bs = runGetOrFail packet $ BSL.fromStrict bs
           7 -> pc PReplay
           8 -> pc PHaltTx
           9 -> pc PFreeText
+          10 -> pc PWSPRDecode
+          11 -> pc PLocation
+          12 -> pc PLoggedADIF
+          13 -> pc PHighlightCallsign
+          14 -> pc PSwitchConfiguration
+          15 -> pc PConfigure
           _ -> mzero
 
     pc :: (Generic b1, FromQt' (Rep b1)) => (b1 -> Packet) -> Get Packet
-    pc constr = constr . to <$> fromQt' 
-         
+    pc constr = constr . to <$> fromQt'
+
     qtMagicWord :: Get ()
     qtMagicWord = do
        0xAD <- getWord8
@@ -162,25 +175,31 @@ packetToUDP p
   = BSL.toStrict $ runPut packet
   where
     packet = case p of
-        PHeartbeat x -> pt 0 x
-        PStatus x -> pt 1 x
-        PDecode x -> pt 2 x        
-        PClear x -> pt 3 x
-        PReply x -> pt 4 x
-        PLogged x -> pt 5 x
-        PClose x -> pt 6 x
-        PReplay x  -> pt 7 x
-        PHaltTx x  -> pt 8 x
-        PFreeText x -> pt 9 x
-        OtherPacket l -> putByteString $ BS.pack l
-           
+        PHeartbeat x           -> pt 0 x
+        PStatus x              -> pt 1 x
+        PDecode x              -> pt 2 x
+        PClear x               -> pt 3 x
+        PReply x               -> pt 4 x
+        PLogged x              -> pt 5 x
+        PClose x               -> pt 6 x
+        PReplay x              -> pt 7 x
+        PHaltTx x              -> pt 8 x
+        PFreeText x            -> pt 9 x
+        PWSPRDecode x          -> pt 10 x
+        PLocation x            -> pt 11 x
+        PLoggedADIF x          -> pt 12 x
+        PHighlightCallsign x   ->  pt 13 x
+        PSwitchConfiguration x ->  pt 14 x
+        PConfigure x           -> pt 15 x
+        OtherPacket l          -> putByteString $ BS.pack l
+
     pt :: (Generic b1, ToQt' (Rep b1)) => Word32 -> b1 -> Put
     pt tag x = do
       qtMagicWord
       putWord32be 2
       putWord32be tag
       toQt' $ from x
-         
+
     qtMagicWord :: Put
     qtMagicWord = do
       putWord8 0xAD

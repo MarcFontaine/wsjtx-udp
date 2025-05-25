@@ -20,15 +20,15 @@
 module WSJTX.UDP.Server
 where
 
-import Control.Monad
-import Control.Concurrent
+import           Control.Concurrent
+import           Control.Monad
 
-import Control.Exception.Base (bracket)
-import Network.Socket hiding (openSocket)
-import Network.Socket.ByteString (send, recvFrom)
+import           Control.Exception.Base    (bracket)
+import           Network.Socket            hiding (openSocket)
+import           Network.Socket.ByteString (recvFrom, send)
 
-import WSJTX.UDP.NetworkMessage
-import WSJTX.UDP.EncodeQt (packetToUDP, parseUDPPacket)
+import           WSJTX.UDP.EncodeQt        (packetToUDP, parseUDPPacket)
+import           WSJTX.UDP.NetworkMessage
 
 wsjtxDefaultPort :: PortNumber
 wsjtxDefaultPort = 2237
@@ -44,7 +44,7 @@ testDump = void $ withWsjtxSocket (wsjtxDefaultAddr, wsjtxDefaultPort) $ \sock -
 withWsjtxSocket :: (HostAddress, PortNumber) -> (Socket -> IO a) -> IO a
 withWsjtxSocket addrPort
   = bracket (openSocket addrPort) close
-         
+
 runWsjtxServer :: Socket -> (PacketWithAddr -> IO ()) -> IO ()
 runWsjtxServer sock callback = forever $ do
   (msg, addr) <- recvFrom sock 1024
