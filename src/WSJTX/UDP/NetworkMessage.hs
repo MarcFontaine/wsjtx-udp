@@ -116,31 +116,31 @@ instance ToJSON Reply where
 instance FromJSON Reply where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
 
-data Logged = Logged {
-    logged_client_id             :: Text
-  , logged_date_time_off         :: DateTime
-  , logged_dx_call               :: Text
-  , logged_dx_grid               :: Text
-  , logged_dial_frequency        :: DialFrequency
-  , logged_mode                  :: Text
-  , logged_report_send           :: Text
-  , logged_report_received       :: Text
-  , logged_tx_power              :: Text
-  , logged_comments              :: Text
-  , logged_name                  :: Text
-  , logged_date_time_on          :: DateTime
-  , logged_operator_call         :: Text
-  , logged_my_call               :: Text
-  , logged_my_grid               :: Text
-  , logged_exchange_sent         :: Text
-  , logged_exchange_received     :: Text
-  , logged_adif_propagation_mode :: Text
+data QSOLogged = QSOLogged {
+    logged_client_id         :: Text
+  , logged_date_time_off     :: UTCTime
+  , logged_dx_call           :: Text
+  , logged_dx_grid           :: Text
+  , logged_dial_frequency    :: DialFrequency
+  , logged_mode              :: Text
+  , logged_report_send       :: Text
+  , logged_report_received   :: Text
+  , logged_tx_power          :: Text
+  , logged_comments          :: Text
+  , logged_name              :: Text
+  , logged_date_time_on      :: UTCTime
+  , logged_operator_call     :: Text
+  , logged_my_call           :: Text
+  , logged_my_grid           :: Text
+  , logged_exchange_sent     :: Text
+  , logged_exchange_received :: Text
+  , logged_propagation_mode  :: Text
   } deriving (Read, Show, Eq, Generic)
 
-instance ToJSON Logged where
+instance ToJSON QSOLogged where
   toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding aesonOptionsDropPrefix
-instance FromJSON Logged where
+instance FromJSON QSOLogged where
   parseJSON = genericParseJSON aesonOptionsDropPrefix
 
 newtype Close = Close {
@@ -282,7 +282,7 @@ data Packet
   | PDecode !Decode
   | PClear !Clear
   | PReply !Reply
-  | PLogged !Logged
+  | PQSOLogged !QSOLogged
   | PClose !Close
   | PReplay !Replay
   | PHaltTx !HaltTx
@@ -311,16 +311,6 @@ instance ToJSON DialFrequency where
 
 instance FromJSON DialFrequency where
   parseJSON v = DialFrequency <$> parseJSON v
-
-newtype DateTime
-  = DateTime {unDateTime :: Word64}
-  deriving (Read, Show, Eq, Generic)
-
-instance ToJSON DateTime where
-  toJSON = genericToJSON defaultOptions
-  toEncoding = genericToEncoding defaultOptions
-instance FromJSON DateTime where
-  parseJSON = genericParseJSON defaultOptions
 
 aesonOptionsDropPrefix :: Options
 aesonOptionsDropPrefix

@@ -55,14 +55,11 @@ instance ToQt Int where toQt = putInt32be . fromIntegral
 instance ToQt Double where toQt = putDoublebe
 
 instance ToQt DialFrequency where toQt = putWord64be . unDialFrequency
-instance ToQt DateTime where toQt = putWord64be . unDateTime
 
 instance ToQt Bool where
   toQt True  = putWord8 1
   toQt False = putWord8 0
 
-instance ToQt NominalDiffTime where
-  toQt t = putWord32be $ round (1000 * nominalDiffTimeToSeconds t)
 instance ToQt Text where
   toQt txt = do
     let bs = Text.encodeUtf8 txt
@@ -115,7 +112,22 @@ instance FromQt Bool where
     if f ==0 then return False else return True
 
 instance FromQt DialFrequency where fromQt = DialFrequency <$> getWord64be
-instance FromQt DateTime where fromQt = DateTime <$> getWord64be
+
+instance FromQt UTCTime where
+  fromQt = do
+    d <- getWord64be
+    t <- fromQt
+    _tzone <- getWord8 -- ignored
+    return $ UTCTime
+      { utctDay = toEnum $ fromIntegral d - 2400000
+      , utctDayTime = t
+      }
+
+instance ToQt UTCTime where
+  toQt t = do
+    putWord64be $ fromIntegral (fromEnum $ utctDay t) + 2400000
+    toQt $ utctDayTime t
+    putWord8 1
 
 -- QTime counts milliseconds
 -- https://doc.qt.io/qt-5/qtime.html#details
@@ -123,6 +135,17 @@ instance FromQt NominalDiffTime where
   fromQt = do
     t <- getWord32be
     return $ secondsToNominalDiffTime $ fromRational (fromIntegral t % 1000)
+
+instance ToQt NominalDiffTime where
+  toQt t = putWord32be $ round (1000 * nominalDiffTimeToSeconds t)
+
+instance FromQt DiffTime where
+  fromQt = do
+    t <- getWord32be
+    return $ picosecondsToDiffTime $ fromIntegral t * 1000000000
+
+instance ToQt DiffTime where
+  toQt t = putWord32be $ fromInteger (diffTimeToPicoseconds t `div` 1000000000)
 
 parseUDPPacket :: BS.ByteString -> Packet
 parseUDPPacket bs = case parseUDPPacket2 bs of
@@ -146,7 +169,7 @@ parseUDPPacket2 bs = runGetOrFail packet $ BSL.fromStrict bs
           2 -> pc PDecode
           3 -> pc PClear
           4 -> pc PReply
-          5 -> pc PLogged
+          5 -> pc PQSOLogged
           6 -> pc PClose
           7 -> pc PReplay
           8 -> pc PHaltTx
@@ -180,7 +203,7 @@ packetToUDP p
         PDecode x              -> pt 2 x
         PClear x               -> pt 3 x
         PReply x               -> pt 4 x
-        PLogged x              -> pt 5 x
+        PQSOLogged x           -> pt 5 x
         PClose x               -> pt 6 x
         PReplay x              -> pt 7 x
         PHaltTx x              -> pt 8 x
