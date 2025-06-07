@@ -1,0 +1,59 @@
+name: Haskell CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ghc: ['9.4.8','9.6.6','9.8.2','9.10.1']
+        cabal: [ '3.12.1.0' ]
+        os: [ubuntu-latest , macOS-latest, windows-latest]
+    name: ${{ matrix.target }} ${{ matrix.os }} GHC ${{ matrix.ghc }}
+    timeout-minutes:
+      60
+    steps:
+    - name: Set up Haskell
+      id: setup-haskell
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: ${{ matrix.ghc }}
+        cabal-version: ${{ matrix.cabal }}
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.setup-haskell.outputs.cabal-store }}
+        key: ${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}
+        restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-
+
+    - name: Set up PostgreSQL
+      uses: ikalnytskyi/action-setup-postgres@v6
+      id: postgres
+      with:
+        username: ci
+        password: sw0rdfish
+        database: test
+
+    - name: Install dependencies
+      run: |
+        cabal update
+        cabal build all --only-dependencies --enable-tests --enable-benchmarks
+
+    - name: Build
+      run: cabal build all --enable-tests --enable-benchmarks
+
+    - name: Run tests
+      run: cabal test all

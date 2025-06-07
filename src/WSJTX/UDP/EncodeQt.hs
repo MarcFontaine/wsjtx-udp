@@ -97,7 +97,7 @@ instance FromQt Text where
     len <- getWord32be
     if len == 0xffffffff then return Text.empty
        else do
-         when (len > 1000) $ fail $ "FromQt Text: String length > 1000 : len: " ++ show len
+         when (len > 1000) $ fail $ "FromQt Text: String length > 1000 : len: " ++ Prelude.show len
          bs <- getByteString $ fromIntegral len
          return $ Text.decodeUtf8With (\_ _ -> Just '_') bs
 
