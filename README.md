@@ -2,24 +2,20 @@ WSJT-X UDP Server
 =================
 
 [![Available on Hackage][badge-hackage]][hackage]
-[![License BSD3][badge-license]][license]
-[![Windows Binary Release][badge-github-releases]][github-releases]
+[![License](https://img.shields.io/github/license/MarcFontaine/wsjtx-udp)](https://github.com/MarcFontaine/wsjtx-udp/blob/master/LICENSE)
+[![CI](https://github.com/MarcFontaine/wsjtx-udp/actions/workflows/haskell.yml/badge.svg)](https://github.com/MarcFontaine/wsjtx-udp/actions/workflows/haskell.yml)
+[![GitHub Releases](https://img.shields.io/github/v/release/MarcFontaine/wsjtx-udp?include_prereleases&sort=semver)](https://github.com/MarcFontaine/wsjtx-udp/releases)
 
 This library provides:
 
-* The types for WSJT-X UDP network messages.
-* Functions for encoding and decoding of packages.
-* UDP Server for receiving messages from WSJT-X and sending to WSJT-X.
+* Types for WSJT-X UDP network messages.
+* Functions for encoding and decoding of messages.
 * JSON instances for network messages.
+* `wsjtx-dump-udp`: A UDP Server for receiving messages from WSJT-X and sending to WSJT-X.
+* `wsjtx-to-db`: A UDP Server that receives messages and stores them in postgresql DB.
 
-`wsjtx-dump-udp` is a simple executable that shows how to use the library.
-`wsjtx-dump-udp` implements a UDP server that receives packages from WSJT-X and prints each
-received package to STDOUT (in a Haskell specific format).
 A more interesting application based on the wsjtx-udp library is available on
 [GitHub](https://github.com/MarcFontaine).
  
-[github-releases]: https://github.com/MarcFontaine/wsjtx-udp/releases
-[badge-license]: https://img.shields.io/badge/license-BSD3-green.svg
-[license]: https://github.com/MarcFontaine/wsjtx-udp/blob/master/LICENSE
 [hackage]: https://hackage.haskell.org/package/wsjtx-udp
 [badge-hackage]: https://img.shields.io/hackage/v/wsjtx-udp.svg
