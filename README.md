@@ -11,11 +11,8 @@ This library provides:
 * Types for WSJT-X UDP network messages.
 * Functions for encoding and decoding of messages.
 * JSON instances for network messages.
-* `wsjtx-dump-udp`: A UDP Server for receiving messages from WSJT-X and sending to WSJT-X.
-* `wsjtx-to-db`: A UDP Server that receives messages and stores them in postgresql DB.
-
-A more interesting application based on the wsjtx-udp library is available on
-[GitHub](https://github.com/MarcFontaine).
+* `wsjtx-dump-udp`: A UDP server for receiving messages from WSJT-X and sending to WSJT-X.
+* `wsjtx-to-db`: A UDP server that receives messages and stores them in a Postgresql DB.
  
 [hackage]: https://hackage.haskell.org/package/wsjtx-udp
 [badge-hackage]: https://img.shields.io/hackage/v/wsjtx-udp.svg

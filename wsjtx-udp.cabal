@@ -2,13 +2,13 @@ name:                wsjtx-udp
 synopsis:            WSJT-X UDP protocol
 description:
   Utilities for the WSJT-X UDP protocol.
-  Encoding and decoding USP packages to binary and JSON and a UDP server.
+  Encoding and decoding of WSJT-X UDP messages a UDP server that listens for messages.
 version:             0.5.0.0
 license:             BSD3
 license-file:        LICENSE
 author:              Marc Fontaine
 maintainer:          Marc.Fontaine@gmx.de
-category:            HAM-radio, wsjtx
+category:            HAM, radio, WSJT-X
 homepage:            https://github.com/MarcFontaine/wsjtx-udp
 extra-source-files:  README.md CHANGELOG.md
 build-type:          Simple
@@ -59,4 +59,3 @@ executable wsjtx-to-db
       , postgresql-simple < 0.8
       , wsjtx-udp >= 0.5.0.0 && < 0.6
   ghc-options:      -rtsopts -Wall -threaded -with-rtsopts=-T
-
