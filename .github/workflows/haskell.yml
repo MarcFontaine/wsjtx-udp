@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         ghc: ['9.4.8','9.6.6','9.8.2','9.10.1']
         cabal: [ '3.12.1.0' ]
@@ -44,7 +44,7 @@ jobs:
       id: postgres
       with:
         username: ci
-        password: sw0rdfish
+        password: cqdx73
         database: test
 
     - name: Install dependencies
