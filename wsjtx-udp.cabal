@@ -59,3 +59,16 @@ executable wsjtx-to-db
       , postgresql-simple < 0.8
       , wsjtx-udp >= 0.6.0.0 && < 0.7
   ghc-options:      -rtsopts -Wall -threaded -with-rtsopts=-T
+
+executable wsjtx-native-messaging
+  main-is:          WsjtxNativeMessaging.hs
+  hs-source-dirs:   demo
+  default-language: Haskell2010
+  build-depends:
+        base  >= 4 && < 5
+      , binary < 0.11
+      , bytestring < 0.13
+      , network < 3.3
+      , aeson < 2.3
+      , wsjtx-udp >= 0.6.0.0 && < 0.7
+  ghc-options:      -rtsopts -Wall -threaded -with-rtsopts=-T
