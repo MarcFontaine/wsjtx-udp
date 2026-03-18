@@ -1,6 +1,6 @@
 {
   description = "flake for wsjtx-udp";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   outputs =
     { self, nixpkgs }:
     let
