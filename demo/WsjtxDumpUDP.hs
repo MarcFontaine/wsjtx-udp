@@ -18,8 +18,8 @@ import WSJTX.UDP.Server (runWsjtxServer, withWsjtxSocket)
 wsjtxPort :: PortNumber
 wsjtxPort = 2237
 
-wsjtxAddr :: HostAddress
-wsjtxAddr = tupleToHostAddress (0,0,0,0)
+wsjtxAddr :: HostAddress6
+wsjtxAddr = (0, 0, 0, 0)
 
 main :: IO ()
 main = do

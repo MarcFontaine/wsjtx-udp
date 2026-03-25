@@ -33,34 +33,36 @@ import           WSJTX.UDP.NetworkMessage
 wsjtxDefaultPort :: PortNumber
 wsjtxDefaultPort = 2237
 
-wsjtxDefaultAddr :: HostAddress
-wsjtxDefaultAddr = tupleToHostAddress (0,0,0,0)
+wsjtxDefaultAddr :: HostAddress6
+wsjtxDefaultAddr = (0, 0 ,0 ,0)
 
 testDump :: IO ()
 testDump = void $ withWsjtxSocket (wsjtxDefaultAddr, wsjtxDefaultPort) $ \sock -> do
   _threadId <- forkIO $ runWsjtxServer sock print
   void getLine
 
-withWsjtxSocket :: (HostAddress, PortNumber) -> (Socket -> IO a) -> IO a
+withWsjtxSocket :: (HostAddress6, PortNumber) -> (Socket -> IO a) -> IO a
 withWsjtxSocket addrPort
   = bracket (openSocket addrPort) close
 
 runWsjtxServer :: Socket -> (PacketWithAddr -> IO ()) -> IO ()
 runWsjtxServer sock callback = forever $ do
   (msg, addr) <- recvFrom sock 1024
-  callback $ PacketWithAddr (parseUDPPacket msg) addr
+  callback $ PacketWithAddr (parseUDPPacket msg) (AddrReference $ show addr)
 
-openSocket :: (HostAddress, PortNumber) -> IO Socket
+openSocket :: (HostAddress6, PortNumber) -> IO Socket
 openSocket (serverAddr, udpPort) = do
-  sock <- socket AF_INET Datagram defaultProtocol
-  bind sock $ SockAddrInet udpPort serverAddr
+  sock <- socket AF_INET6 Datagram defaultProtocol
+  setSocketOption sock IPv6Only 0
+  setSocketOption sock ReuseAddr 1
+  bind sock $ SockAddrInet6 udpPort 0 serverAddr 0
   return sock
 
-replyWithPackets :: (HostAddress, PortNumber) -> [Packet] -> IO ()
+replyWithPackets :: (HostAddress6, PortNumber) -> [Packet] -> IO ()
 replyWithPackets (serverAddr, udpPort) packets = bracket
   (do
      sock <- socket AF_INET Datagram defaultProtocol
-     bind sock $ SockAddrInet udpPort serverAddr
+     bind sock $ SockAddrInet6 udpPort 0 serverAddr 0
 -- wait for a package from the client to find out the address
      (_,addr) <- recvFrom sock 1024
      connect sock addr

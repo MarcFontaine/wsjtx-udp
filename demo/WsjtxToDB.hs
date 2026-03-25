@@ -27,8 +27,8 @@ import WSJTX.UDP.Server (runWsjtxServer, withWsjtxSocket)
 wsjtxPort :: PortNumber
 wsjtxPort = 2237
 
-wsjtxAddr :: HostAddress
-wsjtxAddr = tupleToHostAddress (0,0,0,0)
+wsjtxAddr :: HostAddress6
+wsjtxAddr = (0, 0, 0, 0)
 
 main :: IO ()
 main = do
@@ -38,10 +38,10 @@ main = do
 
 printUsage :: IO ()
 printUsage = do
-  putStrLn "Usage : wsjtx-to-db SQLCMD"
-  putStrLn "Example 'INSERT INTO wsjtx(packet) values (?)'"
+  putStrLn "Usage : wsjtx-to-db <SQLCMD>"
+  putStrLn "Example: wsjtx-to-db 'INSERT INTO wsjtx(packet) values (?)'"
 
-runServer :: HostAddress -> PortNumber -> Query -> IO ()
+runServer :: HostAddress6 -> PortNumber -> Query -> IO ()
 runServer addr port sqlCommand = do
   conn <- connectPostgreSQL "" -- Reads from ENV: PGHOST,PGUSER,PGPASSWORD
   void $ withWsjtxSocket (addr, port) $ \sock -> do

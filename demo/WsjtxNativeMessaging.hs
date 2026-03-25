@@ -21,8 +21,17 @@ import WSJTX.UDP.Server (runWsjtxServer, withWsjtxSocket)
 wsjtxPort :: PortNumber
 wsjtxPort = 2237
 
-wsjtxAddr :: HostAddress
-wsjtxAddr = tupleToHostAddress (0,0,0,0)
+wsjtxAddr :: HostAddress6
+wsjtxAddr = (0, 0, 0, 0)
+
+data Error =
+    ReceiveFromMultipleAddresses SockAddr SockAddr
+  | ReadPrefix  IOException
+  | ReadMessage IOException
+  | PacketDecode String
+  | SendBeforeReceive
+  | BadDestAddress SockAddr AddrReference
+  deriving (Show, Eq)
 
 main :: IO ()
 main = do
