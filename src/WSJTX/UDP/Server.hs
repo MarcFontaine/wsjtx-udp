@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.Server
--- Copyright   :  (c) Marc Fontaine 2017-2024
+-- Copyright   :  (c) Marc Fontaine 2017-2026
 -- License     :  BSD3
 --
 -- Maintainer  :  Marc.Fontaine@gmx.de
