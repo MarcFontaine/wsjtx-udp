@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module      :  WSJTX.UDP.NetworkMessage
--- Copyright   :  (c) Marc Fontaine 2017-2025
+-- Copyright   :  (c) Marc Fontaine 2017-2026
 -- License     :  BSD3
 --
 -- Maintainer  :  Marc.Fontaine@gmx.de
@@ -18,11 +18,11 @@ module WSJTX.UDP.NetworkMessage
 where
 
 import           Data.Aeson     as A
+import qualified Data.Aeson.KeyMap as A
 import           Data.Text      as Text (Text, pack)
 import           Data.Time
 import           Data.Word
 import           GHC.Generics
-import           Network.Socket (SockAddr)
 --import Lens.Micro.TH
 
 data Heartbeat = Heartbeat {
@@ -299,6 +299,7 @@ data Packet
 instance ToJSON Packet where
   toJSON = genericToJSON defaultOptions
   toEncoding = genericToEncoding defaultOptions
+
 instance FromJSON Packet where
   parseJSON = genericParseJSON defaultOptions
 
@@ -318,17 +319,26 @@ aesonOptionsDropPrefix
       fieldLabelModifier = drop 1 . dropWhile (not . (==) '_')
     }
 
-data PacketWithAddr = PacketWithAddr !Packet !SockAddr
+newtype AddrReference = AddrReference { unAddrReference :: String }
+  deriving (Show, Eq, Generic)
+
+data PacketWithAddr = PacketWithAddr !Packet !AddrReference
   deriving (Show, Eq, Generic)
 
 instance ToJSON PacketWithAddr where
-  toJSON (PacketWithAddr p a) = combined
+  toJSON (PacketWithAddr p (AddrReference addr)) = combined
     where
       obj = case toJSON p of
         Object x -> x
         _        -> error "unreachable"
-      extra = "SockAddr" .= A.String (Text.pack $ show a)
+      extra = "SockAddr" .= A.String (Text.pack addr)
       combined = Object ( obj <> extra)
+
+instance FromJSON PacketWithAddr where
+  parseJSON = withObject "PacketWithAddr" $ \obj ->
+    PacketWithAddr
+      <$> parseJSON ( Object $ A.delete "SockAddr" obj)
+      <*> fmap AddrReference (obj .: "SockAddr")
 
 {-
 makeFields ''Heartbeat
